@@ -1,5 +1,5 @@
 import { ScheduleEntry } from "../App";
-import { Button, Flex, useToast } from "@chakra-ui/react";
+import { Button, Flex, useToast, Fade, Slide } from "@chakra-ui/react";
 import { RepeatIcon } from "@chakra-ui/icons";
 import { useState } from "react";
 import PathPicker from "./PathPicker";
@@ -30,41 +30,43 @@ function NewPathAdder({ availablePaths, onAdd, lastAddedDate }: Props) {
   const toast = useToast();
 
   return (
-    <Flex gap={2}>
-      <DatePicker
-        date={date}
-        onDateChange={(date: Date) => {
-          setPickedDate(date);
-        }}
-      />
-      <PathPicker
-        availablePaths={availablePaths}
-        onPathChange={setPickedPath}
-        date={date}
-        reverse={reversed}
-      />
-      <Button
-        onClick={() => {
-          setReversed(!reversed);
-        }}
-      >
-        <RepeatIcon />
-      </Button>
-      <Button
-        width={"5rem"}
-        onClick={() => {
-          if (!pickedPath)
-            return toast({
-              title: "Musisz wybrać ulicę!",
-              status: "error",
-              isClosable: true,
-            });
-          onAdd({ date, path: pickedPath, reversed });
-        }}
-      >
-        Dodaj
-      </Button>
-    </Flex>
+    <Fade in>
+      <Flex gap={2}>
+        <DatePicker
+          date={date}
+          onDateChange={(date: Date) => {
+            setPickedDate(date);
+          }}
+        />
+        <PathPicker
+          availablePaths={availablePaths}
+          onPathChange={setPickedPath}
+          date={date}
+          reverse={reversed}
+        />
+        <Button
+          onClick={() => {
+            setReversed(!reversed);
+          }}
+        >
+          <RepeatIcon />
+        </Button>
+        <Button
+          width={"5rem"}
+          onClick={() => {
+            if (!pickedPath)
+              return toast({
+                title: "Musisz wybrać ulicę!",
+                status: "error",
+                isClosable: true,
+              });
+            onAdd({ date, path: pickedPath, reversed });
+          }}
+        >
+          Dodaj
+        </Button>
+      </Flex>
+    </Fade>
   );
 }
 

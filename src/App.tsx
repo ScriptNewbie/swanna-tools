@@ -1,4 +1,4 @@
-import { Box, Button, Flex, useToast } from "@chakra-ui/react";
+import { Box, Button, Fade, Flex, useToast } from "@chakra-ui/react";
 import { useState, useRef, useEffect } from "react";
 import NewPathAdder from "./components/EntryAdder";
 import ScheduleEntry from "./components/ScheduleEntry";
@@ -203,7 +203,9 @@ function App() {
           />
         </Flex>
       </Box>
-      <PdfRender schedule={schedule} />
+      <Fade in>
+        <PdfRender schedule={schedule} />
+      </Fade>
     </>
   );
 }

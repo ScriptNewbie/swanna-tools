@@ -11,6 +11,7 @@ import PdfRender from "./components/PdfRender";
 export interface ScheduleEntry {
   date: Date;
   path: Path;
+  reversed: boolean;
 }
 
 function App() {
@@ -39,6 +40,15 @@ function App() {
 
   const handleDateChange = (source: ScheduleEntry, date: Date) => {
     const newEntry = { ...source, date };
+    setSchedule(
+      schedule.map((scheduleEntry) =>
+        scheduleEntry === source ? newEntry : scheduleEntry
+      )
+    );
+  };
+
+  const handleDirectionChange = (source: ScheduleEntry) => {
+    const newEntry = { ...source, reversed: !source.reversed };
     setSchedule(
       schedule.map((scheduleEntry) =>
         scheduleEntry === source ? newEntry : scheduleEntry
@@ -182,6 +192,7 @@ function App() {
               onPathChange={handlePathChange}
               onDateChange={handleDateChange}
               onDelete={handleDelete}
+              onDirectionChange={handleDirectionChange}
             />
           ))}
           <NewPathAdder

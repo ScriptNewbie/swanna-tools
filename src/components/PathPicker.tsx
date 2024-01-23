@@ -7,6 +7,7 @@ interface Props {
   availablePaths: Path[];
   onPathChange: (path: Path | null) => void;
   date: Date;
+  reverse: boolean;
 }
 
 function PathPicker({
@@ -14,6 +15,7 @@ function PathPicker({
   availablePaths,
   onPathChange,
   date,
+  reverse,
 }: Props) {
   const [allowLongOverride, setAllowLongOverride] = useState<boolean | null>(
     currentPath?.isLong ? true : null
@@ -25,6 +27,8 @@ function PathPicker({
 
   const longPaths = availablePaths.filter((path) => path.isLong);
   const shortPaths = availablePaths.filter((path) => !path.isLong);
+
+  const direction = reverse ? "reversed" : "normal";
 
   return (
     <Flex flexGrow={1} gap={2}>
@@ -39,7 +43,9 @@ function PathPicker({
         placeholder="Wybierz trasę"
       >
         {currentPath && (
-          <option value={currentPath.id}>{currentPath.streets}</option>
+          <option value={currentPath.id}>
+            {currentPath.streets[direction]}
+          </option>
         )}
         {allowLong && (
           <option disabled value={""}>
@@ -49,7 +55,7 @@ function PathPicker({
         {allowLong &&
           longPaths.map((path) => (
             <option key={path.id} value={path.id}>
-              {path.streets}
+              {path.streets[direction]}
             </option>
           ))}
         <option disabled value={""}>
@@ -57,7 +63,7 @@ function PathPicker({
         </option>
         {shortPaths.map((path) => (
           <option key={path.id} value={path.id}>
-            {path.streets}
+            {path.streets[direction]}
           </option>
         ))}
       </Select>

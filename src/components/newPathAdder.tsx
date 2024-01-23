@@ -1,5 +1,6 @@
 import { ScheduleEntry } from "../App";
 import { Button, Flex, useToast } from "@chakra-ui/react";
+import { RepeatIcon } from "@chakra-ui/icons";
 import { useState } from "react";
 import PathPicker from "./PathPicker";
 import DatePicker from "./datePicker";
@@ -14,6 +15,7 @@ interface Props {
 function NewPathAdder({ availablePaths, onAdd, lastAddedDate }: Props) {
   const [pickedPath, setPickedPath] = useState<Path | null>(null);
   const [pickedDate, setPickedDate] = useState<Date | null>(null);
+  const [reversed, setReversed] = useState(false);
 
   const defaultDate = lastAddedDate
     ? new Date(new Date(lastAddedDate).getTime() + 24 * 60 * 60 * 1000)
@@ -39,7 +41,15 @@ function NewPathAdder({ availablePaths, onAdd, lastAddedDate }: Props) {
         availablePaths={availablePaths}
         onPathChange={setPickedPath}
         date={date}
+        reverse={reversed}
       />
+      <Button
+        onClick={() => {
+          setReversed(!reversed);
+        }}
+      >
+        <RepeatIcon />
+      </Button>
       <Button
         width={"5rem"}
         onClick={() => {
@@ -49,7 +59,7 @@ function NewPathAdder({ availablePaths, onAdd, lastAddedDate }: Props) {
               status: "error",
               isClosable: true,
             });
-          onAdd({ date, path: pickedPath });
+          onAdd({ date, path: pickedPath, reversed });
         }}
       >
         Dodaj

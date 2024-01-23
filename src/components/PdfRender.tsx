@@ -32,6 +32,7 @@ function PdfRender({ schedule }: Props) {
       </Heading>
       <Table fontSize="1.3rem" fontFamily="serif" marginTop={7}>
         {schedule.map((scheduleEntry) => {
+          const direction = scheduleEntry.reversed ? "reversed" : "normal";
           const hours = scheduleEntry.date
             .getHours()
             .toString()
@@ -52,7 +53,9 @@ function PdfRender({ schedule }: Props) {
                 <Text display="inline" fontWeight="bold">{`${
                   days[scheduleEntry.date.getDay()]
                 } - ${hours}:${minutes}`}</Text>{" "}
-                <Text display="inline">{scheduleEntry.path.streets}</Text>
+                <Text display="inline">
+                  {scheduleEntry.path.streets[direction]}
+                </Text>
               </Td>
             </Tr>
           );

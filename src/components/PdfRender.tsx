@@ -16,7 +16,13 @@ const days = [
 
 function PdfRender({ schedule }: Props) {
   return (
-    <Flex id="print" padding={10} alignItems="center" direction="column">
+    <Flex
+      display={schedule.length > 0 ? "flex" : "none"}
+      id="print"
+      padding={10}
+      alignItems="center"
+      direction="column"
+    >
       <Heading textAlign="center" fontWeight="normal" fontFamily="Hoefler Text">
         Plan Odwiedzin Duszpasterskich
         <br />

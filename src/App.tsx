@@ -157,6 +157,14 @@ function App() {
             >
               Wyczyść
             </Button>
+            <Button
+              colorScheme="green"
+              onClick={() => {
+                window.print();
+              }}
+            >
+              Drukuj
+            </Button>
             <input
               key={schedule.length}
               type="file"

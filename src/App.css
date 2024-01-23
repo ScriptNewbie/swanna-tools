@@ -4,6 +4,10 @@
   margin: auto;
 }
 
+td {
+  padding: 1rem !important;
+}
+
 @media print {
   #program {
     display: none;

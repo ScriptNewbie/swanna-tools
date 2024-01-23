@@ -3,7 +3,7 @@ import { Button, Flex, useToast } from "@chakra-ui/react";
 import { RepeatIcon } from "@chakra-ui/icons";
 import { useState } from "react";
 import PathPicker from "./PathPicker";
-import DatePicker from "./datePicker";
+import DatePicker from "./DatePicker";
 import { Path } from "../paths";
 
 interface Props {

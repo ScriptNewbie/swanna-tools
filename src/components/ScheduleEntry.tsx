@@ -1,7 +1,7 @@
 import { ScheduleEntry as ScheduleEntryType } from "../App";
 import PathPicker from "./PathPicker";
 import { Button, Flex } from "@chakra-ui/react";
-import DatePicker from "./datePicker";
+import DatePicker from "./DatePicker";
 import { Path } from "../paths";
 import { RepeatIcon } from "@chakra-ui/icons";
 

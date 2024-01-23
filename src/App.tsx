@@ -1,6 +1,6 @@
 import { Box, Button, Flex, useToast } from "@chakra-ui/react";
 import { useState, useRef, useEffect } from "react";
-import NewPathAdder from "./components/newPathAdder";
+import NewPathAdder from "./components/EntryAdder";
 import ScheduleEntry from "./components/ScheduleEntry";
 import paths, { Path } from "./paths";
 import { saveAs } from "file-saver";

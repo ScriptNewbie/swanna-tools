@@ -1,5 +1,5 @@
 import { ScheduleEntry } from "../App";
-import { Button, Flex, useToast, Fade, Slide } from "@chakra-ui/react";
+import { Button, Flex, useToast, Fade } from "@chakra-ui/react";
 import { RepeatIcon } from "@chakra-ui/icons";
 import { useState } from "react";
 import PathPicker from "./PathPicker";

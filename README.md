@@ -1,3 +1,3 @@
-#Planer odwiedzin duszpasterskich
+# Planer odwiedzin duszpasterskich
 
 Trasy kolędy w pliku src/paths.ts

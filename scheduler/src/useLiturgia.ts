@@ -1,9 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-export interface LiturgyDay {
+interface LiturgyDay {
   date: Date;
   description: string;
+}
+
+export interface Liturgy {
+  [isoDateString: string]: string;
 }
 
 export const useLiturgia = () => {
@@ -17,5 +21,12 @@ export const useLiturgia = () => {
     });
   }, []);
 
-  return liturgia;
+  const liturgyObject = {} as Liturgy;
+
+  liturgia.forEach((item) => {
+    const isoDateString = new Date(item.date).toISOString();
+    liturgyObject[isoDateString] = item.description;
+  });
+
+  return liturgyObject;
 };

@@ -1,12 +1,12 @@
 import { useState } from "react";
 import "./App.css";
-import { LiturgyDay, useLiturgia } from "./useLiturgia";
+import { Liturgy, useLiturgia } from "./useLiturgia";
 import { Button } from "@chakra-ui/react";
 import Day from "./components/day";
-import { isSameDay } from "./utils/isSameDay";
 
 function App() {
   const today = new Date();
+  today.setHours(12, 0, 0, 0);
   const dayDurationInMs = 24 * 60 * 60 * 1000;
   const toSundayDayOffset = 7 - today.getDay();
   const nextSunday = new Date(
@@ -15,7 +15,7 @@ function App() {
 
   const [startingSunday, setStartingSunday] = useState(nextSunday);
   const liturgy = useLiturgia();
-  const [liturgyOverride, setLiturgyOverride] = useState<LiturgyDay[]>([]);
+  const [liturgyOverride, setLiturgyOverride] = useState<Liturgy>({});
 
   const daysArray = Array.from(
     { length: 8 },
@@ -29,13 +29,8 @@ function App() {
     setStartingSunday(new Date(startingSunday.getTime() - 7 * dayDurationInMs));
 
   const handleLiturgyDescriptionChange = (date: Date, description: string) => {
-    const liturgyOverrideCopy = [...liturgyOverride];
-    const modifiedDay = liturgyOverrideCopy.find((liturgyDay) =>
-      isSameDay(liturgyDay.date, date)
-    );
-    if (modifiedDay) modifiedDay.description = description;
-    else liturgyOverrideCopy.push({ date, description });
-
+    const liturgyOverrideCopy = { ...liturgyOverride };
+    liturgyOverrideCopy[date.toISOString()] = description;
     setLiturgyOverride(liturgyOverrideCopy);
   };
 

@@ -1,6 +1,5 @@
 import { Flex, Input, Box } from "@chakra-ui/react";
-import { LiturgyDay } from "../useLiturgia";
-import { isSameDay } from "../utils/isSameDay";
+import { Liturgy } from "../useLiturgia";
 
 const days = [
   "Niedziela",
@@ -14,28 +13,19 @@ const days = [
 
 const getLiturgyForDay = (
   day: Date,
-  liturgy: LiturgyDay[],
-  liturgyOverride: LiturgyDay[]
+  liturgy: Liturgy,
+  liturgyOverride: Liturgy
 ) => {
-  const overridenLiturgy = liturgyOverride.find((element) =>
-    isSameDay(element.date, day)
-  )?.description;
-
-  const scrapedLiturgy = liturgy
-    .map((element: LiturgyDay) =>
-      element.description !== "Dzień Powszedni"
-        ? element
-        : { ...element, description: "" }
-    )
-    .find((element) => isSameDay(element.date, day))?.description;
+  const overridenLiturgy = liturgyOverride[day.toISOString()];
+  const scrapedLiturgy = liturgy[day.toISOString()];
 
   return overridenLiturgy ?? (scrapedLiturgy || "");
 };
 
 interface Props {
   day: Date;
-  liturgy: LiturgyDay[];
-  liturgyOverride: LiturgyDay[];
+  liturgy: Liturgy;
+  liturgyOverride: Liturgy;
   onLiturgyDescritpionChange: (day: Date, description: string) => void;
 }
 

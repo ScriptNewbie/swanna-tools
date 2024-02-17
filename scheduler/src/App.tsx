@@ -23,6 +23,13 @@ function App() {
   };
 
   const updateDay = (day: Date, daySchedule: Mass[]) => {
+    daySchedule.sort((a, b) => {
+      const aValue = parseInt(a.hour.replace(":", ""));
+      const bValue = parseInt(b.hour.replace(":", ""));
+
+      return aValue - bValue;
+    });
+
     const massScheduleCopy = { ...massSchedule };
     massScheduleCopy[day.toISOString()] = daySchedule;
     setMassSchedule(massScheduleCopy);

@@ -94,10 +94,25 @@ const getSpecialEventsForDay = (date: Date) => {
   return specialEvents;
 };
 
+const isEasterMonday = (date: Date) =>
+  datesAreSame(addDaysToDate(getEasterDate(date.getFullYear()), 1), date);
+
+const isChristmas = (day: number, month: number) =>
+  month === 12 && (day === 25 || day === 26);
+
+const isOrthodoxChristmas = (day: number, month: number) =>
+  month === 1 && day === 6;
+
 export const getNewMass = (date: Date, alreadyPresent: Mass[]) => {
-  const day = date.getDay();
+  const month = date.getMonth() + 1;
+  const day = ((date.getDay() + 6) % 7) + 1;
+  const dayOfMonth = date.getDate();
+
   const mostCommonMassesForDay =
-    day === 0
+    day === 7 ||
+    isEasterMonday(date) ||
+    isChristmas(dayOfMonth, month) ||
+    isOrthodoxChristmas(dayOfMonth, month)
       ? [
           { hour: "08:00", intention: "Za Parafian", chapel: true },
           { hour: "10:00", intention: "Za Parafian", chapel: false },

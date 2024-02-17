@@ -21,7 +21,8 @@ export const getLiturgyForDay = (
   liturgyOverride: Liturgy
 ) => {
   const overridenLiturgy = liturgyOverride[day.toISOString()];
-  const scrapedLiturgy = liturgy[day.toISOString()];
+  let scrapedLiturgy = liturgy[day.toISOString()];
+  scrapedLiturgy = scrapedLiturgy === "Dzień Powszedni" ? "" : scrapedLiturgy;
 
   return overridenLiturgy ?? (scrapedLiturgy || "");
 };

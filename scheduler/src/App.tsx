@@ -3,7 +3,7 @@ import "./App.css";
 import { Liturgy, useLiturgia } from "./useLiturgia";
 import { Box, Button } from "@chakra-ui/react";
 import Day from "./components/day";
-import { Mass, MassSchedule, getMostLikelyNewMass } from "./utils/massUtils";
+import { Mass, MassSchedule, getNewMass } from "./utils/massUtils";
 import MassComponent from "./components/mass";
 import { addDaysToDate, getDaysArray, getNextSunday } from "./utils/daysUtils";
 
@@ -32,7 +32,7 @@ function App() {
     const day = massSchedule[date.toISOString()];
     let dayCopy = [] as Mass[];
     if (day) dayCopy = [...day];
-    dayCopy.push(getMostLikelyNewMass(date, dayCopy));
+    dayCopy.push(getNewMass(date, dayCopy));
 
     updateDay(date, dayCopy);
   };

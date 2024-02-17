@@ -19,7 +19,7 @@ function Day({
 }: Props) {
   return (
     <Flex grow={1} gap={2} mt={2} alignItems="center">
-      <Box>{day.toLocaleDateString()}</Box>
+      <Box minWidth={"6.5rem"}>{day.toLocaleDateString()}</Box>
       <Box textAlign={"center"} minWidth={"6rem"}>
         {days[day.getDay()]}
       </Box>

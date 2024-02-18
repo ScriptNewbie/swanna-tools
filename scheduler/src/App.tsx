@@ -8,6 +8,7 @@ import MassComponent from "./components/mass";
 import { addDaysToDate, getDaysArray, getNextSunday } from "./utils/daysUtils";
 import { exportToJson, importFromJson } from "./utils/exportImportUtil";
 import { saveAs } from "file-saver";
+import { ocr } from "./utils/ocr";
 
 function App() {
   const [startingSunday, setStartingSunday] = useState(getNextSunday());
@@ -16,7 +17,8 @@ function App() {
   const [massSchedule, setMassSchedule] = useState<MassSchedule>({});
 
   const toast = useToast();
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const jsonInputRef = useRef<HTMLInputElement>(null);
+  const ocrInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (
@@ -82,7 +84,27 @@ function App() {
     updateDay(date, dayCopy);
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleOcrChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    const promise = ocr(file);
+
+    const result = await promise;
+    console.log(result);
+
+    toast.promise(promise, {
+      success: {
+        title: "Udało się",
+        description: "Pomyślnie odczytano tekst ze zdjęcia",
+      },
+      error: {
+        title: "Błąd",
+        description: "Coś poszło nie tak",
+      },
+      loading: { title: "Ładowanie danych!" },
+    });
+  };
+
+  const handleJsonChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const promise = new Promise((resolve, reject) => {
       const file = e.target.files?.[0];
 
@@ -156,15 +178,15 @@ function App() {
                 type: "application/json",
               }
             );
-            saveAs(blob, startingSunday.toISOString());
+            saveAs(blob, startingSunday.toISOString() + ".json");
           }}
         >
           Zapisz w JSONie
         </Button>
         <Button
           onClick={() => {
-            if (fileInputRef.current) {
-              fileInputRef.current.click();
+            if (jsonInputRef.current) {
+              jsonInputRef.current.click();
             }
           }}
         >
@@ -177,9 +199,9 @@ function App() {
           }
           type="file"
           accept=".json"
-          ref={fileInputRef}
+          ref={jsonInputRef}
           style={{ display: "none" }}
-          onChange={handleFileChange}
+          onChange={handleJsonChange}
         />
       </Flex>
       {getDaysArray(startingSunday).map((day) => (
@@ -205,6 +227,25 @@ function App() {
           ))}
         </Box>
       ))}
+      <Button
+        onClick={() => {
+          if (ocrInputRef.current) {
+            ocrInputRef.current.click();
+          }
+        }}
+      >
+        OCR
+      </Button>
+      <input
+        key={
+          Object.keys(liturgyOverride).length + Object.keys(massSchedule).length
+        }
+        type="file"
+        accept="image/*"
+        ref={ocrInputRef}
+        style={{ display: "none" }}
+        onChange={handleOcrChange}
+      />
     </Box>
   );
 }

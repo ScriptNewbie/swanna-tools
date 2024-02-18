@@ -126,6 +126,12 @@ export const getNewMass = (date: Date, alreadyPresent: Mass[]) => {
         ]
       : day === 2
       ? [{ hour: "07:30", intention: "Za Parafian", chapel: true }]
+      : day === 4
+      ? [
+          ...getSpecialEventsForDay(date),
+          { hour: "17:00", intention: "Za Parafian", chapel: true },
+          { hour: "16:30", intention: "Nabożeństwo", chapel: true },
+        ]
       : [
           ...getSpecialEventsForDay(date),
           { hour: "18:00", intention: "Za Parafian", chapel: false },

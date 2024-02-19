@@ -1,5 +1,5 @@
 import { Box, Button, Flex, Textarea } from "@chakra-ui/react";
-import { ArrowDownIcon, ArrowUpIcon } from "@chakra-ui/icons";
+import { ArrowDownIcon, ArrowUpIcon, UpDownIcon } from "@chakra-ui/icons";
 
 interface Props {
   announcement: string;
@@ -8,6 +8,7 @@ interface Props {
   onChange: (index: number, newValue: string) => void;
   onMoveUp: (index: number) => void;
   onMoveDown: (index: number) => void;
+  onSplit: (index: number) => void;
 }
 
 export interface Annoucments {
@@ -21,6 +22,7 @@ function Announcement({
   onChange,
   onMoveDown,
   onMoveUp,
+  onSplit,
 }: Props) {
   return (
     <Flex alignItems="center" mt={2} gap={2}>
@@ -54,6 +56,13 @@ function Announcement({
         }}
       >
         <ArrowDownIcon />
+      </Button>
+      <Button
+        onClick={() => {
+          onSplit(index);
+        }}
+      >
+        <UpDownIcon />
       </Button>
     </Flex>
   );

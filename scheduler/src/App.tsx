@@ -229,6 +229,19 @@ function App() {
     }
   };
 
+  const handleAnnouncementSplit = (index: number) => {
+    const announcementsArray = announcements[startingSunday.toISOString()];
+    if (announcementsArray) {
+      const splitedElement = announcementsArray[index].split("\n\n");
+
+      updateThisWeekAnnouncments([
+        ...announcementsArray.slice(0, index),
+        ...splitedElement,
+        ...announcementsArray.slice(index + 1),
+      ]);
+    }
+  };
+
   return (
     <Box m={2}>
       <Flex gap={2}>
@@ -319,6 +332,7 @@ function App() {
             onChange={handleAnnouncementChange}
             onMoveUp={handleAnnouncementMoveUp}
             onMoveDown={handleAnnouncementMoveDown}
+            onSplit={handleAnnouncementSplit}
             announcement={announcement}
             index={index}
           />

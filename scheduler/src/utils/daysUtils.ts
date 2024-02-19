@@ -20,8 +20,8 @@ export const getLiturgyForDay = (
   liturgy: Liturgy,
   liturgyOverride: Liturgy
 ) => {
-  const overridenLiturgy = liturgyOverride[day.toISOString()];
-  const scrapedLiturgy = liturgy[day.toISOString()];
+  const overridenLiturgy = liturgyOverride[day.toISOString().split("T")[0]];
+  const scrapedLiturgy = liturgy[day.toISOString().split("T")[0]];
 
   return overridenLiturgy ?? (scrapedLiturgy || "");
 };

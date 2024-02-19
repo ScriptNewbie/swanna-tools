@@ -24,7 +24,7 @@ export const useLiturgia = () => {
   const liturgyObject = {} as Liturgy;
 
   liturgia.forEach((item) => {
-    const isoDateString = new Date(item.date).toISOString();
+    const isoDateString = new Date(item.date).toISOString().split("T")[0];
     liturgyObject[isoDateString] = item.description;
   });
 

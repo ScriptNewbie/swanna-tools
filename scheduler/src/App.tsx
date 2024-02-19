@@ -41,7 +41,7 @@ function App() {
 
   const handleLiturgyDescriptionChange = (date: Date, description: string) => {
     const liturgyOverrideCopy = { ...liturgyOverride };
-    liturgyOverrideCopy[date.toISOString()] = description;
+    liturgyOverrideCopy[date.toISOString().split("T")[0]] = description;
     setLiturgyOverride(liturgyOverrideCopy);
   };
 
@@ -54,12 +54,12 @@ function App() {
     });
 
     const massScheduleCopy = { ...massSchedule };
-    massScheduleCopy[day.toISOString()] = daySchedule;
+    massScheduleCopy[day.toISOString().split("T")[0]] = daySchedule;
     setMassSchedule(massScheduleCopy);
   };
 
   const handleMassAdd = (date: Date) => {
-    const day = massSchedule[date.toISOString()];
+    const day = massSchedule[date.toISOString().split("T")[0]];
     let dayCopy = [] as Mass[];
     if (day) dayCopy = [...day];
     dayCopy.push(getNewMass(date, dayCopy));
@@ -68,7 +68,7 @@ function App() {
   };
 
   const handleMassDelete = (date: Date, massId: number) => {
-    const day = massSchedule[date.toISOString()];
+    const day = massSchedule[date.toISOString().split("T")[0]];
     if (day) {
       updateDay(
         date,
@@ -83,7 +83,7 @@ function App() {
     propertyName: string,
     newValue: string | boolean
   ) => {
-    const day = massSchedule[date.toISOString()];
+    const day = massSchedule[date.toISOString().split("T")[0]];
     if (day) {
       const dayCopy = [...day];
       const massToEditIndex = dayCopy.findIndex((mass) => mass.id === massId);
@@ -167,12 +167,14 @@ function App() {
 
   const updateThisWeekAnnouncments = (newAnnouncementsArray: string[]) => {
     const announcementsCopy = { ...announcements };
-    announcementsCopy[startingSunday.toISOString()] = newAnnouncementsArray;
+    announcementsCopy[startingSunday.toISOString().split("T")[0]] =
+      newAnnouncementsArray;
     setAnnouncements(announcementsCopy);
   };
 
   const handleAnnouncementAdd = (announcementsToAdd?: string[]) => {
-    const announcementsArray = announcements[startingSunday.toISOString()];
+    const announcementsArray =
+      announcements[startingSunday.toISOString().split("T")[0]];
 
     let announcementsArrayCopy = [] as string[];
     if (announcementsArray) announcementsArrayCopy = [...announcementsArray];
@@ -187,7 +189,8 @@ function App() {
   };
 
   const handleAnnouncementDeletion = (index: number) => {
-    const announcementsArray = announcements[startingSunday.toISOString()];
+    const announcementsArray =
+      announcements[startingSunday.toISOString().split("T")[0]];
     if (announcementsArray) {
       const announcementsArrayCopy = [...announcementsArray];
       announcementsArrayCopy.splice(index, 1);
@@ -196,7 +199,8 @@ function App() {
   };
 
   const handleAnnouncementChange = (index: number, newValue: string) => {
-    const announcementsArray = announcements[startingSunday.toISOString()];
+    const announcementsArray =
+      announcements[startingSunday.toISOString().split("T")[0]];
     if (announcementsArray) {
       const announcementsArrayCopy = [...announcementsArray];
       announcementsArrayCopy[index] = newValue;
@@ -205,7 +209,8 @@ function App() {
   };
 
   const handleAnnouncementMoveUp = (index: number) => {
-    const announcementsArray = announcements[startingSunday.toISOString()];
+    const announcementsArray =
+      announcements[startingSunday.toISOString().split("T")[0]];
     if (announcementsArray && index > 0 && index < announcementsArray.length) {
       const announcementsArrayCopy = [...announcementsArray];
       const a = announcementsArrayCopy[index - 1];
@@ -216,7 +221,8 @@ function App() {
   };
 
   const handleAnnouncementMoveDown = (index: number) => {
-    const announcementsArray = announcements[startingSunday.toISOString()];
+    const announcementsArray =
+      announcements[startingSunday.toISOString().split("T")[0]];
     if (
       announcementsArray &&
       index >= 0 &&
@@ -231,7 +237,8 @@ function App() {
   };
 
   const handleAnnouncementSplit = (index: number) => {
-    const announcementsArray = announcements[startingSunday.toISOString()];
+    const announcementsArray =
+      announcements[startingSunday.toISOString().split("T")[0]];
     if (announcementsArray) {
       const splitedElement = announcementsArray[index].split("\n\n");
 
@@ -276,7 +283,10 @@ function App() {
                   type: "application/json",
                 }
               );
-              saveAs(blob, startingSunday.toISOString() + ".json");
+              saveAs(
+                blob,
+                startingSunday.toISOString().split("T")[0] + ".json"
+              );
             }}
           >
             Zapisz w JSONie
@@ -304,7 +314,7 @@ function App() {
         </Flex>
         <Heading mt={3}>Porządek nabożeństw</Heading>
         {getDaysArray(startingSunday).map((day) => (
-          <Box key={day.toISOString()}>
+          <Box key={day.toISOString().split("T")[0]}>
             <Day
               day={day}
               liturgy={liturgy}
@@ -312,7 +322,7 @@ function App() {
               onLiturgyDescritpionChange={handleLiturgyDescriptionChange}
               onMassAdd={handleMassAdd}
             />
-            {massSchedule[day.toISOString()]?.map((mass) => (
+            {massSchedule[day.toISOString().split("T")[0]]?.map((mass) => (
               <MassComponent
                 key={mass.id}
                 onDelete={(massId) => {
@@ -327,7 +337,7 @@ function App() {
           </Box>
         ))}
         <Heading mt={3}>Ogłoszenia parafialne</Heading>
-        {announcements[startingSunday.toISOString()]?.map(
+        {announcements[startingSunday.toISOString().split("T")[0]]?.map(
           (announcement, index) => (
             <Announcement
               key={index}

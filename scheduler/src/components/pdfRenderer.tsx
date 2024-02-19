@@ -64,7 +64,7 @@ function PdfRenderer({
             <Box fontWeight="bold">{`${
               daysNames[day.getDay()]
             } – ${getFormatedDate(day)}${getLiturgyString(day)}`}</Box>
-            {massSchedule[day.toISOString()]?.map((mass) => (
+            {massSchedule[day.toISOString().split("T")[0]]?.map((mass) => (
               <Box>{`${mass.hour} ${mass.chapel ? "(kaplica) " : ""}${
                 mass.intention
               }`}</Box>
@@ -78,7 +78,7 @@ function PdfRenderer({
           Ogłoszenia parafialne z dnia {getFormatedDate(startingSunday)}
         </Box>
         <br />
-        {announcements[startingSunday.toISOString()]
+        {announcements[startingSunday.toISOString().split("T")[0]]
           ?.concat(
             "Bóg zapłać za wszystkie złożone ofiary oraz za wszelkie wpłaty na konto naszej parafii."
           )

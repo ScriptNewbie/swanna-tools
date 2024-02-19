@@ -70,10 +70,13 @@ function App() {
   };
 
   const handleMassDelete = (date: Date, massId: number) => {
-    updateDay(
-      date,
-      massSchedule[date.toISOString()]!.filter((mass) => mass.id !== massId)
-    );
+    const day = massSchedule[date.toISOString()];
+    if (day) {
+      updateDay(
+        date,
+        day.filter((mass) => mass.id !== massId)
+      );
+    }
   };
 
   const handleMassPropertyChange = (
@@ -82,14 +85,17 @@ function App() {
     propertyName: string,
     newValue: string | boolean
   ) => {
-    const dayCopy = [...massSchedule[date.toISOString()]!];
-    const massToEditIndex = dayCopy.findIndex((mass) => mass.id === massId);
-    dayCopy[massToEditIndex] = {
-      ...dayCopy[massToEditIndex],
-      [propertyName]: newValue,
-    };
+    const day = massSchedule[date.toISOString()];
+    if (day) {
+      const dayCopy = [...day];
+      const massToEditIndex = dayCopy.findIndex((mass) => mass.id === massId);
+      dayCopy[massToEditIndex] = {
+        ...dayCopy[massToEditIndex],
+        [propertyName]: newValue,
+      };
 
-    updateDay(date, dayCopy);
+      updateDay(date, dayCopy);
+    }
   };
 
   const handleOcrChange = async (e: React.ChangeEvent<HTMLInputElement>) => {

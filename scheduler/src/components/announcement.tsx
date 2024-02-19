@@ -1,13 +1,23 @@
 import { Box, Button, Flex, Textarea } from "@chakra-ui/react";
+import { ArrowDownIcon, ArrowUpIcon } from "@chakra-ui/icons";
 
 interface Props {
   announcement: string;
   index: number;
   onDelete: (index: number) => void;
   onChange: (index: number, newValue: string) => void;
+  onMoveUp: (index: number) => void;
+  onMoveDown: (index: number) => void;
 }
 
-function Announcement({ announcement, index, onDelete, onChange }: Props) {
+function Announcement({
+  announcement,
+  index,
+  onDelete,
+  onChange,
+  onMoveDown,
+  onMoveUp,
+}: Props) {
   return (
     <Flex alignItems="center" mt={2} gap={2}>
       <Box textAlign="right" minWidth={"1.5rem"}>
@@ -26,6 +36,20 @@ function Announcement({ announcement, index, onDelete, onChange }: Props) {
         }}
       >
         -
+      </Button>
+      <Button
+        onClick={() => {
+          onMoveUp(index);
+        }}
+      >
+        <ArrowUpIcon />
+      </Button>
+      <Button
+        onClick={() => {
+          onMoveDown(index);
+        }}
+      >
+        <ArrowDownIcon />
       </Button>
     </Flex>
   );

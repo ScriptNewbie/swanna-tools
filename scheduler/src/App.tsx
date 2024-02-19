@@ -11,6 +11,8 @@ import { saveAs } from "file-saver";
 import { ocr } from "./utils/ocr";
 import Announcement from "./components/announcement";
 
+import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
+
 interface Annoucments {
   [isoDateString: string]: string[];
 }
@@ -205,11 +207,41 @@ function App() {
     }
   };
 
+  const handleAnnouncementMoveUp = (index: number) => {
+    const announcementsArray = announcements[startingSunday.toISOString()];
+    if (announcementsArray && index > 0 && index < announcementsArray.length) {
+      const announcementsArrayCopy = [...announcementsArray];
+      const a = announcementsArrayCopy[index - 1];
+      announcementsArrayCopy[index - 1] = announcementsArrayCopy[index];
+      announcementsArrayCopy[index] = a;
+      updateThisWeekAnnouncments(announcementsArrayCopy);
+    }
+  };
+
+  const handleAnnouncementMoveDown = (index: number) => {
+    const announcementsArray = announcements[startingSunday.toISOString()];
+    if (
+      announcementsArray &&
+      index >= 0 &&
+      index < announcementsArray.length - 1
+    ) {
+      const announcementsArrayCopy = [...announcementsArray];
+      const a = announcementsArrayCopy[index + 1];
+      announcementsArrayCopy[index + 1] = announcementsArrayCopy[index];
+      announcementsArrayCopy[index] = a;
+      updateThisWeekAnnouncments(announcementsArrayCopy);
+    }
+  };
+
   return (
     <Box m={2}>
       <Flex gap={2}>
-        <Button onClick={prevWeek}>{"<-"}</Button>
-        <Button onClick={nextWeek}>{"->"}</Button>
+        <Button onClick={prevWeek}>
+          <ArrowLeftIcon />
+        </Button>
+        <Button onClick={nextWeek}>
+          <ArrowRightIcon />
+        </Button>
         <Button
           onClick={() => {
             const data = localStorage.getItem("data");
@@ -282,7 +314,20 @@ function App() {
         </Box>
       ))}
       <Heading mt={3}>Ogłoszenia parafialne</Heading>
-      <Flex mt={2} justifyContent="space-between">
+      {announcements[startingSunday.toISOString()]?.map(
+        (announcement, index) => (
+          <Announcement
+            key={index}
+            onDelete={handleAnnouncementDeletion}
+            onChange={handleAnnouncementChange}
+            onMoveUp={handleAnnouncementMoveUp}
+            onMoveDown={handleAnnouncementMoveDown}
+            announcement={announcement}
+            index={index}
+          />
+        )
+      )}
+      <Flex mt={2} gap={2} justifyContent="flex-end">
         <Button
           onClick={() => {
             if (ocrInputRef.current) {
@@ -305,17 +350,6 @@ function App() {
         />
         <Button onClick={() => handleAnnouncementAdd()}>+</Button>
       </Flex>
-      {announcements[startingSunday.toISOString()]?.map(
-        (announcement, index) => (
-          <Announcement
-            key={index}
-            onDelete={handleAnnouncementDeletion}
-            onChange={handleAnnouncementChange}
-            announcement={announcement}
-            index={index}
-          />
-        )
-      )}
     </Box>
   );
 }

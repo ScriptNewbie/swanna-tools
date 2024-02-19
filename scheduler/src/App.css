@@ -1,0 +1,21 @@
+#print {
+  width: 21cm;
+  border: solid black 1px;
+  margin: auto;
+}
+
+@media print {
+  #program {
+    display: none;
+  }
+
+  #announcements {
+    page-break-inside: avoid;
+  }
+
+  #print {
+    width: 100%;
+    padding: 0;
+    border: none;
+  }
+}

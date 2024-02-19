@@ -12,6 +12,7 @@ import { ocr } from "./utils/ocr";
 import Announcement, { Annoucments } from "./components/announcement";
 
 import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
+import PdfRenderer from "./components/pdfRenderer";
 
 function App() {
   const [startingSunday, setStartingSunday] = useState(getNextSunday());
@@ -243,125 +244,138 @@ function App() {
   };
 
   return (
-    <Box m={2}>
-      <Flex gap={2}>
-        <Button onClick={prevWeek}>
-          <ArrowLeftIcon />
-        </Button>
-        <Button onClick={nextWeek}>
-          <ArrowRightIcon />
-        </Button>
-        <Button
-          onClick={() => {
-            const data = localStorage.getItem("data");
-            if (data) {
-              console.log(data);
-              const { schedule, liturgy, announcements } = importFromJson(data);
-              setLiturgyOverride(liturgy);
-              setMassSchedule(schedule);
-              setAnnouncements(announcements);
-            }
-          }}
-        >
-          Załaduj ostatnią wersję
-        </Button>
-        <Button
-          onClick={() => {
-            const blob = new Blob(
-              [exportToJson(massSchedule, liturgyOverride, announcements)],
-              {
-                type: "application/json",
+    <>
+      <Box id="program" m={2}>
+        <Flex gap={2}>
+          <Button onClick={prevWeek}>
+            <ArrowLeftIcon />
+          </Button>
+          <Button onClick={nextWeek}>
+            <ArrowRightIcon />
+          </Button>
+          <Button
+            onClick={() => {
+              const data = localStorage.getItem("data");
+              if (data) {
+                console.log(data);
+                const { schedule, liturgy, announcements } =
+                  importFromJson(data);
+                setLiturgyOverride(liturgy);
+                setMassSchedule(schedule);
+                setAnnouncements(announcements);
               }
-            );
-            saveAs(blob, startingSunday.toISOString() + ".json");
-          }}
-        >
-          Zapisz w JSONie
-        </Button>
-        <Button
-          onClick={() => {
-            if (jsonInputRef.current) {
-              jsonInputRef.current.click();
+            }}
+          >
+            Załaduj ostatnią wersję
+          </Button>
+          <Button
+            onClick={() => {
+              const blob = new Blob(
+                [exportToJson(massSchedule, liturgyOverride, announcements)],
+                {
+                  type: "application/json",
+                }
+              );
+              saveAs(blob, startingSunday.toISOString() + ".json");
+            }}
+          >
+            Zapisz w JSONie
+          </Button>
+          <Button
+            onClick={() => {
+              if (jsonInputRef.current) {
+                jsonInputRef.current.click();
+              }
+            }}
+          >
+            Ładuj z JSONa
+          </Button>
+          <input
+            key={
+              Object.keys(liturgyOverride).length +
+              Object.keys(massSchedule).length
             }
-          }}
-        >
-          Ładuj z JSONa
-        </Button>
-        <input
-          key={
-            Object.keys(liturgyOverride).length +
-            Object.keys(massSchedule).length
-          }
-          type="file"
-          accept=".json"
-          ref={jsonInputRef}
-          style={{ display: "none" }}
-          onChange={handleJsonChange}
-        />
-      </Flex>
-      <Heading mt={3}>Porządek nabożeństw</Heading>
-      {getDaysArray(startingSunday).map((day) => (
-        <Box key={day.toISOString()}>
-          <Day
-            day={day}
-            liturgy={liturgy}
-            liturgyOverride={liturgyOverride}
-            onLiturgyDescritpionChange={handleLiturgyDescriptionChange}
-            onMassAdd={handleMassAdd}
+            type="file"
+            accept=".json"
+            ref={jsonInputRef}
+            style={{ display: "none" }}
+            onChange={handleJsonChange}
           />
-          {massSchedule[day.toISOString()]?.map((mass) => (
-            <MassComponent
-              key={mass.id}
-              onDelete={(massId) => {
-                handleMassDelete(day, massId);
-              }}
-              onPropertyChange={(massId, propertyName, newValue) => {
-                handleMassPropertyChange(day, massId, propertyName, newValue);
-              }}
-              mass={mass}
+        </Flex>
+        <Heading mt={3}>Porządek nabożeństw</Heading>
+        {getDaysArray(startingSunday).map((day) => (
+          <Box key={day.toISOString()}>
+            <Day
+              day={day}
+              liturgy={liturgy}
+              liturgyOverride={liturgyOverride}
+              onLiturgyDescritpionChange={handleLiturgyDescriptionChange}
+              onMassAdd={handleMassAdd}
             />
-          ))}
-        </Box>
-      ))}
-      <Heading mt={3}>Ogłoszenia parafialne</Heading>
-      {announcements[startingSunday.toISOString()]?.map(
-        (announcement, index) => (
-          <Announcement
-            key={index}
-            onDelete={handleAnnouncementDeletion}
-            onChange={handleAnnouncementChange}
-            onMoveUp={handleAnnouncementMoveUp}
-            onMoveDown={handleAnnouncementMoveDown}
-            onSplit={handleAnnouncementSplit}
-            announcement={announcement}
-            index={index}
-          />
-        )
-      )}
-      <Flex mt={2} gap={2} justifyContent="flex-end">
-        <Button
-          onClick={() => {
-            if (ocrInputRef.current) {
-              ocrInputRef.current.click();
+            {massSchedule[day.toISOString()]?.map((mass) => (
+              <MassComponent
+                key={mass.id}
+                onDelete={(massId) => {
+                  handleMassDelete(day, massId);
+                }}
+                onPropertyChange={(massId, propertyName, newValue) => {
+                  handleMassPropertyChange(day, massId, propertyName, newValue);
+                }}
+                mass={mass}
+              />
+            ))}
+          </Box>
+        ))}
+        <Heading mt={3}>Ogłoszenia parafialne</Heading>
+        {announcements[startingSunday.toISOString()]?.map(
+          (announcement, index) => (
+            <Announcement
+              key={index}
+              onDelete={handleAnnouncementDeletion}
+              onChange={handleAnnouncementChange}
+              onMoveUp={handleAnnouncementMoveUp}
+              onMoveDown={handleAnnouncementMoveDown}
+              onSplit={handleAnnouncementSplit}
+              announcement={announcement}
+              index={index}
+            />
+          )
+        )}
+        <Flex mt={2} gap={2} justifyContent="flex-end">
+          <Button
+            onClick={() => {
+              if (ocrInputRef.current) {
+                ocrInputRef.current.click();
+              }
+            }}
+          >
+            OCR
+          </Button>
+          <input
+            key={
+              Object.keys(liturgyOverride).length +
+              Object.keys(massSchedule).length
             }
-          }}
-        >
-          OCR
-        </Button>
-        <input
-          key={
-            Object.keys(liturgyOverride).length +
-            Object.keys(massSchedule).length
-          }
-          type="file"
-          accept="image/*"
-          ref={ocrInputRef}
-          style={{ display: "none" }}
-          onChange={handleOcrChange}
-        />
-        <Button onClick={() => handleAnnouncementAdd()}>+</Button>
-      </Flex>
-    </Box>
+            type="file"
+            accept="image/*"
+            ref={ocrInputRef}
+            style={{ display: "none" }}
+            onChange={handleOcrChange}
+          />
+          <Button onClick={() => handleAnnouncementAdd()}>+</Button>
+        </Flex>
+        <Heading mt={3} mb={3}>
+          Podgląd wydruku
+        </Heading>
+      </Box>
+      <PdfRenderer
+        startingSunday={startingSunday}
+        massSchedule={massSchedule}
+        announcements={announcements}
+        liturgy={liturgy}
+        liturgyOverride={liturgyOverride}
+      />
+    </>
   );
 }
 

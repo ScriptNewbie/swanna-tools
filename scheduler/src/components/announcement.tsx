@@ -10,6 +10,10 @@ interface Props {
   onMoveDown: (index: number) => void;
 }
 
+export interface Annoucments {
+  [isoDateString: string]: string[];
+}
+
 function Announcement({
   announcement,
   index,

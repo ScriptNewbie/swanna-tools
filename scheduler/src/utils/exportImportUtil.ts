@@ -1,3 +1,4 @@
+import { Annoucments } from "../components/announcement";
 import { Liturgy } from "../useLiturgia";
 import { MassSchedule } from "./massUtils";
 
@@ -20,18 +21,24 @@ const keepLatestEntries = (
   return filteredObject;
 };
 
-export const exportToJson = (schedule: MassSchedule, liturgy: Liturgy) => {
+export const exportToJson = (
+  schedule: MassSchedule,
+  liturgy: Liturgy,
+  announcements: Annoucments
+) => {
   const filteredSchedule = keepLatestEntries(schedule, 50);
   const filteredLiturgy = keepLatestEntries(liturgy, 50);
+  const filteredAnnouncements = keepLatestEntries(announcements, 7);
 
   return JSON.stringify({
     schedule: filteredSchedule,
     liturgy: filteredLiturgy,
+    announcements: filteredAnnouncements,
   });
 };
 
 export const importFromJson = (
   json: string
-): { schedule: MassSchedule; liturgy: Liturgy } => {
+): { schedule: MassSchedule; liturgy: Liturgy; announcements: Annoucments } => {
   return JSON.parse(json);
 };

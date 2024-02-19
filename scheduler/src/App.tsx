@@ -9,13 +9,9 @@ import { addDaysToDate, getDaysArray, getNextSunday } from "./utils/daysUtils";
 import { exportToJson, importFromJson } from "./utils/exportImportUtil";
 import { saveAs } from "file-saver";
 import { ocr } from "./utils/ocr";
-import Announcement from "./components/announcement";
+import Announcement, { Annoucments } from "./components/announcement";
 
 import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
-
-interface Annoucments {
-  [isoDateString: string]: string[];
-}
 
 function App() {
   const [startingSunday, setStartingSunday] = useState(getNextSunday());
@@ -24,8 +20,6 @@ function App() {
   const [massSchedule, setMassSchedule] = useState<MassSchedule>({});
   const [announcements, setAnnouncements] = useState<Annoucments>({});
 
-  console.log(massSchedule);
-
   const toast = useToast();
   const jsonInputRef = useRef<HTMLInputElement>(null);
   const ocrInputRef = useRef<HTMLInputElement>(null);
@@ -33,12 +27,13 @@ function App() {
   useEffect(() => {
     if (
       Object.keys(liturgyOverride).length > 0 ||
-      Object.keys(massSchedule).length > 0
+      Object.keys(massSchedule).length > 0 ||
+      Object.keys(announcements).length > 0
     ) {
-      const data = exportToJson(massSchedule, liturgyOverride);
+      const data = exportToJson(massSchedule, liturgyOverride, announcements);
       localStorage.setItem("data", data);
     }
-  }, [liturgyOverride, massSchedule]);
+  }, [liturgyOverride, massSchedule, announcements]);
 
   const nextWeek = () => setStartingSunday(addDaysToDate(startingSunday, 7));
   const prevWeek = () => setStartingSunday(addDaysToDate(startingSunday, -7));
@@ -136,9 +131,10 @@ function App() {
           const data = event.target?.result;
 
           if (typeof data === "string") {
-            const { schedule, liturgy } = importFromJson(data);
+            const { schedule, liturgy, announcements } = importFromJson(data);
             setLiturgyOverride(liturgy);
             setMassSchedule(schedule);
+            setAnnouncements(announcements);
             resolve("Schedule imported");
           } else {
             reject(new Error("Invalid data type"));
@@ -247,9 +243,10 @@ function App() {
             const data = localStorage.getItem("data");
             if (data) {
               console.log(data);
-              const { schedule, liturgy } = importFromJson(data);
+              const { schedule, liturgy, announcements } = importFromJson(data);
               setLiturgyOverride(liturgy);
               setMassSchedule(schedule);
+              setAnnouncements(announcements);
             }
           }}
         >
@@ -258,7 +255,7 @@ function App() {
         <Button
           onClick={() => {
             const blob = new Blob(
-              [exportToJson(massSchedule, liturgyOverride)],
+              [exportToJson(massSchedule, liturgyOverride, announcements)],
               {
                 type: "application/json",
               }

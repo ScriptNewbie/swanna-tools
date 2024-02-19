@@ -6,6 +6,8 @@ export const ocr = async (file: File | undefined) => {
     const ret = await worker.recognize(file);
 
     await worker.terminate();
-    return ret.data.text;
+    return ret.data.text
+      .split("\n\n")
+      .map((string) => string.replace(/\n/g, " "));
   }
 };

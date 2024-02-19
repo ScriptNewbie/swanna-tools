@@ -147,13 +147,13 @@ export const getNewMass = (date: Date, alreadyPresent: Mass[]) => {
       )
     )
       return {
-        id: alreadyPresent.reduce((a, b) => a + b.id, 1),
+        id: alreadyPresent.reduce((a, b) => Math.max(a, b.id), 0) + 1,
         ...potentialMass,
       };
   }
   return {
-    id: alreadyPresent.reduce((a, b) => a + b.id, 1),
-    hour: "",
+    id: alreadyPresent.reduce((a, b) => Math.max(a, b.id), 0) + 1,
+    hour: "00:00",
     intention: "Za Parafian",
     chapel: false,
   };

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import { Liturgy, useLiturgia } from "./useLiturgia";
-import { Box, Button, Flex, useToast } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, useToast } from "@chakra-ui/react";
 import Day from "./components/day";
 import { Mass, MassSchedule, getNewMass } from "./utils/massUtils";
 import MassComponent from "./components/mass";
@@ -9,12 +9,20 @@ import { addDaysToDate, getDaysArray, getNextSunday } from "./utils/daysUtils";
 import { exportToJson, importFromJson } from "./utils/exportImportUtil";
 import { saveAs } from "file-saver";
 import { ocr } from "./utils/ocr";
+import Announcement from "./components/announcement";
+
+interface Annoucments {
+  [isoDateString: string]: string[];
+}
 
 function App() {
   const [startingSunday, setStartingSunday] = useState(getNextSunday());
   const liturgy = useLiturgia();
   const [liturgyOverride, setLiturgyOverride] = useState<Liturgy>({});
   const [massSchedule, setMassSchedule] = useState<MassSchedule>({});
+  const [announcements, setAnnouncements] = useState<Annoucments>({});
+
+  console.log(massSchedule);
 
   const toast = useToast();
   const jsonInputRef = useRef<HTMLInputElement>(null);
@@ -88,9 +96,6 @@ function App() {
     const file = e.target.files?.[0];
     const promise = ocr(file);
 
-    const result = await promise;
-    console.log(result);
-
     toast.promise(promise, {
       success: {
         title: "Udało się",
@@ -102,6 +107,9 @@ function App() {
       },
       loading: { title: "Ładowanie danych!" },
     });
+
+    const result = await promise;
+    if (result) handleAnnouncementAdd(result);
   };
 
   const handleJsonChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -150,6 +158,45 @@ function App() {
       },
       loading: { title: "Ładowanie danych!" },
     });
+  };
+
+  const updateThisWeekAnnouncments = (newAnnouncementsArray: string[]) => {
+    const announcementsCopy = { ...announcements };
+    announcementsCopy[startingSunday.toISOString()] = newAnnouncementsArray;
+    setAnnouncements(announcementsCopy);
+  };
+
+  const handleAnnouncementAdd = (announcementsToAdd?: string[]) => {
+    const announcementsArray = announcements[startingSunday.toISOString()];
+
+    let announcementsArrayCopy = [] as string[];
+    if (announcementsArray) announcementsArrayCopy = [...announcementsArray];
+    if (announcementsToAdd)
+      announcementsArrayCopy = [
+        ...announcementsArrayCopy,
+        ...announcementsToAdd,
+      ];
+    else announcementsArrayCopy.push("");
+
+    updateThisWeekAnnouncments(announcementsArrayCopy);
+  };
+
+  const handleAnnouncementDeletion = (index: number) => {
+    const announcementsArray = announcements[startingSunday.toISOString()];
+    if (announcementsArray) {
+      const announcementsArrayCopy = [...announcementsArray];
+      announcementsArrayCopy.splice(index, 1);
+      updateThisWeekAnnouncments(announcementsArrayCopy);
+    }
+  };
+
+  const handleAnnouncementChange = (index: number, newValue: string) => {
+    const announcementsArray = announcements[startingSunday.toISOString()];
+    if (announcementsArray) {
+      const announcementsArrayCopy = [...announcementsArray];
+      announcementsArrayCopy[index] = newValue;
+      updateThisWeekAnnouncments(announcementsArrayCopy);
+    }
   };
 
   return (
@@ -204,6 +251,7 @@ function App() {
           onChange={handleJsonChange}
         />
       </Flex>
+      <Heading mt={3}>Porządek nabożeństw</Heading>
       {getDaysArray(startingSunday).map((day) => (
         <Box key={day.toISOString()}>
           <Day
@@ -227,25 +275,41 @@ function App() {
           ))}
         </Box>
       ))}
-      <Button
-        onClick={() => {
-          if (ocrInputRef.current) {
-            ocrInputRef.current.click();
+      <Heading mt={3}>Ogłoszenia parafialne</Heading>
+      <Flex mt={2} justifyContent="space-between">
+        <Button
+          onClick={() => {
+            if (ocrInputRef.current) {
+              ocrInputRef.current.click();
+            }
+          }}
+        >
+          OCR
+        </Button>
+        <input
+          key={
+            Object.keys(liturgyOverride).length +
+            Object.keys(massSchedule).length
           }
-        }}
-      >
-        OCR
-      </Button>
-      <input
-        key={
-          Object.keys(liturgyOverride).length + Object.keys(massSchedule).length
-        }
-        type="file"
-        accept="image/*"
-        ref={ocrInputRef}
-        style={{ display: "none" }}
-        onChange={handleOcrChange}
-      />
+          type="file"
+          accept="image/*"
+          ref={ocrInputRef}
+          style={{ display: "none" }}
+          onChange={handleOcrChange}
+        />
+        <Button onClick={() => handleAnnouncementAdd()}>+</Button>
+      </Flex>
+      {announcements[startingSunday.toISOString()]?.map(
+        (announcement, index) => (
+          <Announcement
+            key={index}
+            onDelete={handleAnnouncementDeletion}
+            onChange={handleAnnouncementChange}
+            announcement={announcement}
+            index={index}
+          />
+        )
+      )}
     </Box>
   );
 }

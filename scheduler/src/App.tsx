@@ -21,6 +21,13 @@ function App() {
   const [massSchedule, setMassSchedule] = useState<MassSchedule>({});
   const [announcements, setAnnouncements] = useState<Annoucments>({});
 
+  document.title = startingSunday
+    .toISOString()
+    .split("T")[0]
+    .split("-")
+    .reverse()
+    .join("-");
+
   const toast = useToast();
   const jsonInputRef = useRef<HTMLInputElement>(null);
   const ocrInputRef = useRef<HTMLInputElement>(null);

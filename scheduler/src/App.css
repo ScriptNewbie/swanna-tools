@@ -2,9 +2,14 @@
   width: 21cm;
   border: solid black 1px;
   margin: auto;
+  line-height: 1.2;
 }
 
 @media print {
+  #fontSize {
+    display: none;
+  }
+
   #program {
     display: none;
   }

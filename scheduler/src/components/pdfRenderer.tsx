@@ -8,6 +8,10 @@ import {
 import { MassSchedule } from "../utils/massUtils";
 import { Annoucments } from "./announcement";
 import { useState } from "react";
+import { Additional } from "../App";
+import Markdown from "react-markdown";
+import remarkDirective from "remark-directive";
+import remarkDirectiveRehype from "remark-directive-rehype";
 
 interface Props {
   startingSunday: Date;
@@ -15,6 +19,7 @@ interface Props {
   liturgy: Liturgy;
   liturgyOverride: Liturgy;
   announcements: Annoucments;
+  additional: Additional;
 }
 
 const addLeadingZero = (number: number) => {
@@ -36,6 +41,7 @@ function PdfRenderer({
   liturgy,
   liturgyOverride,
   announcements,
+  additional,
 }: Props) {
   const getLiturgyString = (date: Date) => {
     const liturgyForDay = getLiturgyForDay(date, liturgy, liturgyOverride);
@@ -74,22 +80,24 @@ function PdfRenderer({
         </Box>
         <br />
         <Box>
-          {days.map((day) => (
-            <Box>
+          {days.map((day, index) => (
+            <Box key={index}>
               <Box fontWeight="bold">{`${
                 daysNames[day.getDay()]
               } – ${getFormatedDate(day)}${getLiturgyString(day)}`}</Box>
-              {massSchedule[day.toISOString().split("T")[0]]?.map((mass) => (
-                <Flex>
-                  <Box style={{ textWrap: "nowrap" }} min-width="auto">
-                    {`${mass.hour}${mass.chapel ? " (kaplica)" : ""}`}
-                    <Box display="inline" color="white">
-                      -
+              {massSchedule[day.toISOString().split("T")[0]]?.map(
+                (mass, index) => (
+                  <Flex key={index}>
+                    <Box style={{ textWrap: "nowrap" }} min-width="auto">
+                      {`${mass.hour}${mass.chapel ? " (kaplica)" : ""}`}
+                      <Box display="inline" color="white">
+                        -
+                      </Box>
                     </Box>
-                  </Box>
-                  <Box textAlign="justify">{`${mass.intention}`}</Box>
-                </Flex>
-              ))}
+                    <Box textAlign="justify">{`${mass.intention}`}</Box>
+                  </Flex>
+                )
+              )}
             </Box>
           ))}
         </Box>
@@ -104,11 +112,17 @@ function PdfRenderer({
               "Bóg zapłać za wszystkie złożone ofiary oraz za wszelkie wpłaty na konto naszej parafii."
             )
             .map((announcement, index) => (
-              <Flex>
+              <Flex key={index}>
                 <Box width="auto">{index + 1 + "."}</Box>
                 <Box textAlign="justify">{announcement}</Box>
               </Flex>
             ))}
+        </Box>
+        <br />
+        <Box>
+          <Markdown remarkPlugins={[remarkDirective, remarkDirectiveRehype]}>
+            {additional[startingSunday.toISOString().split("T")[0]]}
+          </Markdown>
         </Box>
       </Flex>
     </>

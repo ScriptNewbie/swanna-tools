@@ -13,6 +13,11 @@ import Announcement, { Annoucments } from "./components/announcement";
 
 import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
 import PdfRenderer from "./components/pdfRenderer";
+import Additional from "./components/additional";
+
+export interface Additional {
+  [isoDateString: string]: string;
+}
 
 function App() {
   const [startingSunday, setStartingSunday] = useState(getNextSunday());
@@ -20,6 +25,7 @@ function App() {
   const [liturgyOverride, setLiturgyOverride] = useState<Liturgy>({});
   const [massSchedule, setMassSchedule] = useState<MassSchedule>({});
   const [announcements, setAnnouncements] = useState<Annoucments>({});
+  const [additional, setAdditional] = useState<Additional>({});
 
   document.title = startingSunday
     .toISOString()
@@ -36,12 +42,18 @@ function App() {
     if (
       Object.keys(liturgyOverride).length > 0 ||
       Object.keys(massSchedule).length > 0 ||
-      Object.keys(announcements).length > 0
+      Object.keys(announcements).length > 0 ||
+      Object.keys(additional).length > 0
     ) {
-      const data = exportToJson(massSchedule, liturgyOverride, announcements);
+      const data = exportToJson(
+        massSchedule,
+        liturgyOverride,
+        announcements,
+        additional
+      );
       localStorage.setItem("data", data);
     }
-  }, [liturgyOverride, massSchedule, announcements]);
+  }, [liturgyOverride, massSchedule, announcements, additional]);
 
   const nextWeek = () => setStartingSunday(addDaysToDate(startingSunday, 7));
   const prevWeek = () => setStartingSunday(addDaysToDate(startingSunday, -7));
@@ -139,10 +151,12 @@ function App() {
           const data = event.target?.result;
 
           if (typeof data === "string") {
-            const { schedule, liturgy, announcements } = importFromJson(data);
+            const { schedule, liturgy, announcements, additional } =
+              importFromJson(data);
             setLiturgyOverride(liturgy);
             setMassSchedule(schedule);
             setAnnouncements(announcements);
+            setAdditional(additional);
             resolve("Schedule imported");
           } else {
             reject(new Error("Invalid data type"));
@@ -257,6 +271,13 @@ function App() {
     }
   };
 
+  const handleAdditionalChange = (newValue: string) => {
+    const additionalCopy = { ...additional };
+    additionalCopy[startingSunday.toISOString().split("T")[0]] = newValue;
+    setAdditional(additionalCopy);
+    console.log(additional);
+  };
+
   return (
     <>
       <Box id="program" m={2}>
@@ -272,11 +293,12 @@ function App() {
               const data = localStorage.getItem("data");
               if (data) {
                 console.log(data);
-                const { schedule, liturgy, announcements } =
+                const { schedule, liturgy, announcements, additional } =
                   importFromJson(data);
                 setLiturgyOverride(liturgy);
                 setMassSchedule(schedule);
                 setAnnouncements(announcements);
+                setAdditional(additional);
               }
             }}
           >
@@ -285,7 +307,14 @@ function App() {
           <Button
             onClick={() => {
               const blob = new Blob(
-                [exportToJson(massSchedule, liturgyOverride, announcements)],
+                [
+                  exportToJson(
+                    massSchedule,
+                    liturgyOverride,
+                    announcements,
+                    additional
+                  ),
+                ],
                 {
                   type: "application/json",
                 }
@@ -381,6 +410,11 @@ function App() {
           />
           <Button onClick={() => handleAnnouncementAdd()}>+</Button>
         </Flex>
+        <Heading mt={3}>Dodatkowe informacje</Heading>
+        <Additional
+          value={additional[startingSunday.toISOString().split("T")[0]] || ""}
+          onChange={handleAdditionalChange}
+        />
         <Heading mt={3} mb={3}>
           Podgląd wydruku
         </Heading>
@@ -391,6 +425,7 @@ function App() {
         announcements={announcements}
         liturgy={liturgy}
         liturgyOverride={liturgyOverride}
+        additional={additional}
       />
     </>
   );

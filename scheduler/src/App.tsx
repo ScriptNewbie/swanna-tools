@@ -14,6 +14,7 @@ import Announcement, { Annoucments } from "./components/announcement";
 import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
 import PdfRenderer from "./components/pdfRenderer";
 import Additional from "./components/additional";
+import LastWeekAnnouncement from "./components/lastWeekAnnouncement";
 
 export interface Additional {
   [isoDateString: string]: string;
@@ -410,6 +411,23 @@ function App() {
           />
           <Button onClick={() => handleAnnouncementAdd()}>+</Button>
         </Flex>
+        <Box marginLeft={3}>Kopiuj z zeszłego tygodnia:</Box>
+        {announcements[
+          addDaysToDate(startingSunday, -7).toISOString().split("T")[0]
+        ]?.map((announcement, index) => {
+          return announcements[
+            startingSunday.toISOString().split("T")[0]
+          ]?.includes(announcement) ? null : (
+            <LastWeekAnnouncement
+              key={index}
+              onCopy={(a) => {
+                handleAnnouncementAdd([a]);
+              }}
+              announcement={announcement}
+              index={index}
+            />
+          );
+        })}
         <Heading mt={3}>Dodatkowe informacje</Heading>
         <Additional
           value={additional[startingSunday.toISOString().split("T")[0]] || ""}

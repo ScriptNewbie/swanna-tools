@@ -18,6 +18,7 @@ function LastWeekAnnouncement({ announcement, index, onCopy }: Props) {
       </Box>
       <Box
         padding={2}
+        backgroundColor={"#EEE"}
         border={"solid 1px; border-color: #E2E8F0; border-radius: 0.375rem"}
         flexGrow={1}
         children={announcement}

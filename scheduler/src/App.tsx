@@ -411,7 +411,9 @@ function App() {
           />
           <Button onClick={() => handleAnnouncementAdd()}>+</Button>
         </Flex>
-        <Box marginLeft={3}>Kopiuj z zeszłego tygodnia:</Box>
+        <Box textAlign="right" mt={3} mr={3}>
+          Kopiuj z zeszłego tygodnia:
+        </Box>
         {announcements[
           addDaysToDate(startingSunday, -7).toISOString().split("T")[0]
         ]?.map((announcement, index) => {

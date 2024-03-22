@@ -41,12 +41,17 @@ const getEasterDate = (year: number) => {
   return new Date(year, month - 1, day);
 };
 
-const getService = (day: number, serviceName: string, hour?: string) => {
+const getService = (
+  day: number,
+  serviceName: string,
+  hour?: string,
+  inChapel?: boolean
+) => {
   hour = hour || (day === 7 ? "15:00" : day === 4 ? "16:30" : "17:30");
   return {
     hour,
     intention: serviceName,
-    chapel: day === 4,
+    chapel: inChapel === false ? false : inChapel || day === 4,
   };
 };
 
@@ -68,6 +73,7 @@ const getSpecialEventsForDay = (date: Date) => {
   const greatFastingEnd = getEasterDate(year);
   const greatFastingBegin = addDaysToDate(greatFastingEnd, -46);
   if (date > greatFastingBegin && date < greatFastingEnd) {
+    const greatThursday = addDaysToDate(greatFastingEnd, -3);
     const goodFriday = addDaysToDate(greatFastingEnd, -2);
     const holySaturday = addDaysToDate(greatFastingEnd, -1);
 
@@ -79,6 +85,10 @@ const getSpecialEventsForDay = (date: Date) => {
     } else if (datesAreSame(holySaturday, date)) {
       specialEvents.push(
         getService(day, "Wigilia Paschalna w Wielką Noc", "19:00")
+      );
+    } else if (datesAreSame(greatThursday, date)) {
+      specialEvents.push(
+        getService(day, "Msza Wieczerzy Pańskiej", "18:00", false)
       );
     } else {
       if (day === 5) specialEvents.push(getService(day, "Droga krzyżowa"));

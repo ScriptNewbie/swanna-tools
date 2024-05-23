@@ -431,6 +431,39 @@ function App() {
           );
         })}
         <Heading mt={3}>Dodatkowe informacje</Heading>
+
+        <Flex my={2} gap={2}>
+          <Button
+            colorScheme="green"
+            isDisabled={
+              !additional[
+                addDaysToDate(startingSunday, -7).toISOString().split("T")[0]
+              ]
+            }
+            onClick={() =>
+              handleAdditionalChange(
+                additional[
+                  addDaysToDate(startingSunday, -7).toISOString().split("T")[0]
+                ]
+              )
+            }
+          >
+            Kopiuj z poprzedniego tygodnia
+          </Button>
+          <Button
+            onClick={() =>
+              handleAdditionalChange(`:::center
+**Zapowiedzi**
+:br :br
+Jan Kowalski, wolny, zam. Tarnowskie Góry:br
+Anna Nowak, wolna, zam. Tarnowskie Góry
+:::`)
+            }
+          >
+            Zapowiedzi
+          </Button>
+          <Button onClick={() => handleAdditionalChange("")}>Wyczyść</Button>
+        </Flex>
         <Additional
           value={additional[startingSunday.toISOString().split("T")[0]] || ""}
           onChange={handleAdditionalChange}

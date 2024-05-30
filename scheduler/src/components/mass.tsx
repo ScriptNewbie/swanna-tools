@@ -32,6 +32,7 @@ function Mass({ mass, onPropertyChange, onDelete }: Props) {
         kaplica
       </Checkbox>
       <Textarea
+        bgColor={mass.chapel ? "#99d6ff" : ""}
         flexGrow={1}
         value={mass.intention}
         onChange={(e) => {

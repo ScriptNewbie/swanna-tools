@@ -14,11 +14,15 @@ export const useLiturgia = () => {
   const [liturgia, setLiturgia] = useState<LiturgyDay[]>([]);
 
   useEffect(() => {
-    axios.get<LiturgyDay[]>("http://194.28.50.140:5100/").then((res) => {
-      setLiturgia(
-        res.data.map((day) => ({ ...day, date: new Date(day.date) }))
-      );
-    });
+    axios
+      .get<LiturgyDay[]>(
+        import.meta.env.VITE_LITURGIA_URL ?? "http://localhost:3000"
+      )
+      .then((res) => {
+        setLiturgia(
+          res.data.map((day) => ({ ...day, date: new Date(day.date) }))
+        );
+      });
   }, []);
 
   const liturgyObject = {} as Liturgy;

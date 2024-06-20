@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import "./App.css";
 import { Liturgy, useLiturgia } from "./useLiturgia";
 import { Box, Button, Flex, Heading, useToast } from "@chakra-ui/react";
@@ -27,6 +27,22 @@ function App() {
   const [massSchedule, setMassSchedule] = useState<MassSchedule>({});
   const [announcements, setAnnouncements] = useState<Annoucments>({});
   const [additional, setAdditional] = useState<Additional>({});
+  const [imported, setImported] = useState(0);
+
+  const intentionsAutocompleteData = useMemo(() => {
+    return Array.from(
+      new Set(
+        Object.values(massSchedule)
+          .flat()
+          .flatMap((value) => value?.intention)
+          .filter((a) => a)
+      )
+    );
+  }, [imported]);
+
+  const announcementsAutocompleteData = useMemo(() => {
+    return Array.from(new Set(Object.values(announcements).flat()));
+  }, [imported]);
 
   document.title = startingSunday
     .toISOString()
@@ -158,6 +174,7 @@ function App() {
             setMassSchedule(schedule);
             setAnnouncements(announcements);
             setAdditional(additional);
+            setImported(imported + 1);
             resolve("Schedule imported");
           } else {
             reject(new Error("Invalid data type"));
@@ -293,13 +310,13 @@ function App() {
             onClick={() => {
               const data = localStorage.getItem("data");
               if (data) {
-                console.log(data);
                 const { schedule, liturgy, announcements, additional } =
                   importFromJson(data);
                 setLiturgyOverride(liturgy);
                 setMassSchedule(schedule);
                 setAnnouncements(announcements);
                 setAdditional(additional);
+                setImported(imported + 1);
               }
             }}
           >
@@ -361,6 +378,7 @@ function App() {
             />
             {massSchedule[day.toISOString().split("T")[0]]?.map((mass) => (
               <MassComponent
+                autocompleteData={intentionsAutocompleteData as string[]}
                 key={mass.id}
                 onDelete={(massId) => {
                   handleMassDelete(day, massId);
@@ -385,6 +403,7 @@ function App() {
               onSplit={handleAnnouncementSplit}
               announcement={announcement}
               index={index}
+              autocompleteData={announcementsAutocompleteData}
             />
           )
         )}

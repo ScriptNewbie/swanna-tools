@@ -90,11 +90,11 @@ function PdfRenderer({
                   <Flex key={index}>
                     <Box style={{ textWrap: "nowrap" }} min-width="auto">
                       {`${mass.hour}${mass.chapel ? " (kaplica)" : ""}`}
-                      <Box display="inline" color="white">
-                        -
-                      </Box>
                     </Box>
-                    <Box textAlign="justify">{`${mass.intention}`}</Box>
+                    <Box
+                      ml="0.3em"
+                      textAlign="justify"
+                    >{`${mass.intention}`}</Box>
                   </Flex>
                 )
               )}

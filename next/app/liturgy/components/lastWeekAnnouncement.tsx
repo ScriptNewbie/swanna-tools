@@ -21,8 +21,9 @@ function LastWeekAnnouncement({ announcement, index, onCopy }: Props) {
         backgroundColor={"#EEE"}
         border={"solid 1px; border-color: #E2E8F0; border-radius: 0.375rem"}
         flexGrow={1}
-        children={announcement}
-      />
+      >
+        {announcement}
+      </Box>
       <Button
         colorScheme="green"
         onClick={() => {

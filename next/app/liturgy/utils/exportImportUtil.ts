@@ -1,4 +1,4 @@
-import { Additional } from "../App";
+import { Additional } from "../page";
 import { Annoucments } from "../components/announcement";
 import { Liturgy } from "../useLiturgia";
 import { MassSchedule } from "./massUtils";

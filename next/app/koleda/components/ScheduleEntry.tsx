@@ -1,4 +1,4 @@
-import { ScheduleEntry as ScheduleEntryType } from "../App";
+import { ScheduleEntry as ScheduleEntryType } from "../page";
 import PathPicker from "./PathPicker";
 import { Button, Flex } from "@chakra-ui/react";
 import DatePicker from "./DatePicker";

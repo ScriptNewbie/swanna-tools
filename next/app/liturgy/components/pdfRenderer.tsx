@@ -8,7 +8,7 @@ import {
 import { MassSchedule } from "../utils/massUtils";
 import { Annoucments } from "./announcement";
 import { useState } from "react";
-import { Additional } from "../App";
+import { Additional } from "../page";
 import Markdown from "react-markdown";
 import remarkDirective from "remark-directive";
 import remarkDirectiveRehype from "remark-directive-rehype";

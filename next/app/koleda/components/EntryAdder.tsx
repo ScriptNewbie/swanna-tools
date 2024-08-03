@@ -1,4 +1,4 @@
-import { ScheduleEntry } from "../App";
+import { ScheduleEntry } from "../page";
 import { Button, Flex, useToast, Fade } from "@chakra-ui/react";
 import { RepeatIcon } from "@chakra-ui/icons";
 import { useState } from "react";

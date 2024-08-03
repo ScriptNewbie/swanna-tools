@@ -1,5 +1,5 @@
 import { Flex, Heading, Table, Text, Tr, Td } from "@chakra-ui/react";
-import { ScheduleEntry } from "../App";
+import { ScheduleEntry } from "../page";
 
 interface Props {
   schedule: ScheduleEntry[];
@@ -47,7 +47,7 @@ function PdfRender({ schedule }: Props) {
             .padStart(2, "0");
           const day = scheduleEntry.date.getDate().toString().padStart(2, "0");
           return (
-            <Tr>
+            <Tr key={scheduleEntry.date.toDateString()}>
               <Td border="solid rgba(0,0,0,0.2) 1px">{`${day}.${month}.${year}`}</Td>
               <Td border="solid rgba(0,0,0,0.2) 1px">
                 <Text display="inline" fontWeight="bold">{`${

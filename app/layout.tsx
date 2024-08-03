@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./Providers";
+import { Button, Flex } from "@chakra-ui/react";
+import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,7 +20,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Providers>{children}</Providers>
+        <Providers>
+          <Flex m={3} justify="flex-end" gap={2}>
+            <Link href="/liturgy">
+              <Button>Ogłoszenia parafialne</Button>
+            </Link>
+            <Link href="/koleda">
+              <Button>Kolęda</Button>
+            </Link>
+          </Flex>
+          {children}
+        </Providers>
       </body>
     </html>
   );

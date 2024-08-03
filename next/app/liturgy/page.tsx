@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useMemo, useRef, useState } from "react";
 import "./App.css";
 import { Liturgy, useLiturgia } from "./useLiturgia";
@@ -44,12 +45,14 @@ function App() {
     return Array.from(new Set(Object.values(announcements).flat()));
   }, [imported]);
 
-  document.title = startingSunday
-    .toISOString()
-    .split("T")[0]
-    .split("-")
-    .reverse()
-    .join("-");
+  useEffect(() => {
+    document.title = startingSunday
+      .toISOString()
+      .split("T")[0]
+      .split("-")
+      .reverse()
+      .join("-");
+  });
 
   const toast = useToast();
   const jsonInputRef = useRef<HTMLInputElement>(null);

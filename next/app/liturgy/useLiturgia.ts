@@ -1,5 +1,5 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
+import { getLiturgia } from "./getLiturgia";
 
 interface LiturgyDay {
   date: Date;
@@ -14,15 +14,9 @@ export const useLiturgia = () => {
   const [liturgia, setLiturgia] = useState<LiturgyDay[]>([]);
 
   useEffect(() => {
-    axios
-      .get<LiturgyDay[]>(
-        import.meta.env.VITE_LITURGIA_URL ?? "http://localhost:3000"
-      )
-      .then((res) => {
-        setLiturgia(
-          res.data.map((day) => ({ ...day, date: new Date(day.date) }))
-        );
-      });
+    getLiturgia().then((res) => {
+      setLiturgia(res.map((day) => ({ ...day, date: new Date(day.date) })));
+    });
   }, []);
 
   const liturgyObject = {} as Liturgy;

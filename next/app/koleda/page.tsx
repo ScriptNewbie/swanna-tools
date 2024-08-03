@@ -1,3 +1,4 @@
+"use client";
 import { Box, Button, Fade, Flex, useToast } from "@chakra-ui/react";
 import { useState, useRef, useEffect } from "react";
 import NewPathAdder from "./components/EntryAdder";
@@ -109,7 +110,7 @@ function App() {
   useEffect(() => {
     if (schedule.length > 0) {
       const data = exportSchedule(schedule);
-      localStorage.setItem("schedule", data);
+      localStorage.setItem("koleda-schedule", data);
     }
   }, [schedule]);
 
@@ -120,7 +121,7 @@ function App() {
           <Flex gap={2}>
             <Button
               onClick={() => {
-                const schedule = localStorage.getItem("schedule");
+                const schedule = localStorage.getItem("koleda-schedule");
                 if (schedule) {
                   importSchedule(schedule, setSchedule);
                   return toast({

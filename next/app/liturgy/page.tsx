@@ -71,7 +71,7 @@ function App() {
         announcements,
         additional
       );
-      localStorage.setItem("data", data);
+      localStorage.setItem("liturgy-data", data);
     }
   }, [liturgyOverride, massSchedule, announcements, additional]);
 
@@ -311,7 +311,7 @@ function App() {
           </Button>
           <Button
             onClick={() => {
-              const data = localStorage.getItem("data");
+              const data = localStorage.getItem("liturgy-data");
               if (data) {
                 const { schedule, liturgy, announcements, additional } =
                   importFromJson(data);

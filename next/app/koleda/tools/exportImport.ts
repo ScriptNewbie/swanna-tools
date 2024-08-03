@@ -1,4 +1,4 @@
-import { ScheduleEntry } from "../App";
+import { ScheduleEntry } from "../page";
 import paths from "../paths";
 
 interface ImportEntry {

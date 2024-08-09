@@ -21,7 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Providers>
-          <Flex m={3} justify="flex-end" gap={2}>
+          <Flex id="menu" m={3} justify="flex-end" gap={2}>
             <Link href="/liturgy">
               <Button>Ogłoszenia parafialne</Button>
             </Link>

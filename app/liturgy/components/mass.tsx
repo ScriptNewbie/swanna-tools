@@ -1,10 +1,11 @@
 import { Button, Checkbox, Flex, Input } from "@chakra-ui/react";
 import { Mass as MassType } from "../utils/massUtils";
 import Autocomplete from "./Autocomplete";
+import { AutoComplete } from "../utils/autocomplete";
 
 interface Props {
   mass: MassType;
-  autocompleteData: string[];
+  intentionAutocompleter: AutoComplete;
   onDelete: (massId: number) => void;
   onPropertyChange: (
     massId: number,
@@ -13,7 +14,12 @@ interface Props {
   ) => void;
 }
 
-function Mass({ mass, onPropertyChange, onDelete, autocompleteData }: Props) {
+function Mass({
+  mass,
+  onPropertyChange,
+  onDelete,
+  intentionAutocompleter,
+}: Props) {
   return (
     <Flex ml={"3rem"} grow={1} gap={2} mt={2} alignItems="center">
       <Input
@@ -34,7 +40,7 @@ function Mass({ mass, onPropertyChange, onDelete, autocompleteData }: Props) {
         kaplica
       </Checkbox>
       <Autocomplete
-        data={autocompleteData}
+        autocompleter={intentionAutocompleter}
         value={mass.intention}
         highlight={mass.chapel}
         onChange={(value) => {

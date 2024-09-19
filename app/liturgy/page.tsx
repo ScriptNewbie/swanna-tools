@@ -16,6 +16,7 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
 import PdfRenderer from "./components/pdfRenderer";
 import Additional from "./components/additional";
 import LastWeekAnnouncement from "./components/lastWeekAnnouncement";
+import { AutoComplete } from "./utils/autocomplete";
 
 export interface Additional {
   [isoDateString: string]: string;
@@ -30,19 +31,19 @@ function App() {
   const [additional, setAdditional] = useState<Additional>({});
   const [imported, setImported] = useState(0);
 
-  const intentionsAutocompleteData = useMemo(() => {
-    return Array.from(
-      new Set(
-        Object.values(massSchedule)
-          .flat()
-          .flatMap((value) => value?.intention)
-          .filter((a) => a)
-      )
-    );
-  }, [imported]);
+  const intentionsAutocompleter = useRef(new AutoComplete([]));
+  const annAutocompleter = useRef(new AutoComplete([]));
 
-  const announcementsAutocompleteData = useMemo(() => {
-    return Array.from(new Set(Object.values(announcements).flat()));
+  useEffect(() => {
+    intentionsAutocompleter.current = new AutoComplete(
+      Object.values(massSchedule)
+        .flat()
+        .map((mass) => mass?.intention || "")
+    );
+
+    annAutocompleter.current = new AutoComplete(
+      Object.values(announcements).flat()
+    );
   }, [imported]);
 
   useEffect(() => {
@@ -381,7 +382,7 @@ function App() {
             />
             {massSchedule[day.toISOString().split("T")[0]]?.map((mass) => (
               <MassComponent
-                autocompleteData={intentionsAutocompleteData as string[]}
+                intentionAutocompleter={intentionsAutocompleter.current}
                 key={mass.id}
                 onDelete={(massId) => {
                   handleMassDelete(day, massId);
@@ -406,7 +407,7 @@ function App() {
               onSplit={handleAnnouncementSplit}
               announcement={announcement}
               index={index}
-              autocompleteData={announcementsAutocompleteData}
+              autocompleter={annAutocompleter.current}
             />
           )
         )}

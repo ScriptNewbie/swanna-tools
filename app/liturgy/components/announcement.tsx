@@ -1,11 +1,12 @@
 import { Box, Button, Flex } from "@chakra-ui/react";
 import { ArrowDownIcon, ArrowUpIcon, UpDownIcon } from "@chakra-ui/icons";
 import Autocomplete from "./Autocomplete";
+import { AutoComplete } from "../utils/autocomplete";
 
 interface Props {
   announcement: string;
   index: number;
-  autocompleteData: string[];
+  autocompleter: AutoComplete;
   onDelete: (index: number) => void;
   onChange: (index: number, newValue: string) => void;
   onMoveUp: (index: number) => void;
@@ -20,7 +21,7 @@ export interface Annoucments {
 function Announcement({
   announcement,
   index,
-  autocompleteData,
+  autocompleter,
   onDelete,
   onChange,
   onMoveDown,
@@ -33,7 +34,7 @@ function Announcement({
         {index + 1 + ". "}
       </Box>
       <Autocomplete
-        data={autocompleteData}
+        autocompleter={autocompleter}
         value={announcement}
         onChange={(value) => {
           onChange(index, value);

@@ -136,8 +136,8 @@ function App() {
     }
   };
 
-  const handleOcrChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+  const handleOcrChange = async (file: File | undefined) => {
+    if (!file) return;
     const promise = ocr(file);
 
     toast.promise(promise, {
@@ -418,19 +418,23 @@ function App() {
                 ocrInputRef.current.click();
               }
             }}
+            onDrop={(e) => {
+              e.preventDefault();
+              handleOcrChange(e.dataTransfer.files[0]);
+            }}
+            onDragOver={(e) => {
+              e.preventDefault();
+            }}
           >
             OCR
           </Button>
           <input
-            key={
-              Object.keys(liturgyOverride).length +
-              Object.keys(massSchedule).length
-            }
+            key={Object.values(announcements)[0]?.length ?? 0}
             type="file"
             accept="image/*"
             ref={ocrInputRef}
             style={{ display: "none" }}
-            onChange={handleOcrChange}
+            onChange={(e) => handleOcrChange(e.target.files?.[0])}
           />
           <Button onClick={() => handleAnnouncementAdd()}>+</Button>
         </Flex>

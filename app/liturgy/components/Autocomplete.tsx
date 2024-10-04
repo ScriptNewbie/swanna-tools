@@ -41,29 +41,35 @@ function Autocomplete({ autocompleter, value, onChange, highlight }: Props) {
     }
   };
 
+  const [isFocused, setIsFocused] = useState(false);
+
   return (
     <Flex grow={1} direction="column">
       <Textarea
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
         ref={ref}
         value={value}
         style={{ backgroundColor: highlight ? "#99d6ff" : undefined }}
         onChange={(e) => onChange(e.currentTarget.value)}
         onKeyDown={handleKeyDown}
       />
-      <Flex gap={1}>
-        {autosugestions.slice(0, 5).map((s, index) => (
-          <Text
-            onClick={() => {
-              ref.current?.focus();
-              insertSuggestion(index);
-            }}
-            color={index !== pickedAuto ? "gray" : undefined}
-            key={s + index}
-          >
-            {s}
-          </Text>
-        ))}
-      </Flex>
+      {isFocused && (
+        <Flex gap={1}>
+          {autosugestions.slice(0, 5).map((s, index) => (
+            <Text
+              onClick={() => {
+                ref.current?.focus();
+                insertSuggestion(index);
+              }}
+              color={index !== pickedAuto ? "gray" : undefined}
+              key={s + index}
+            >
+              {s}
+            </Text>
+          ))}
+        </Flex>
+      )}
     </Flex>
   );
 }

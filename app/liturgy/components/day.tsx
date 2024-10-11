@@ -1,6 +1,7 @@
-import { Flex, Input, Box, Button } from "@chakra-ui/react";
+import { Flex, Box, Button } from "@chakra-ui/react";
 import { Liturgy } from "../useLiturgia";
 import { days, getLiturgyForDay } from "../utils/daysUtils";
+import LiturgyInput from "./liturgyInput";
 
 interface Props {
   day: Date;
@@ -23,10 +24,10 @@ function Day({
       <Box textAlign={"center"} minWidth={"6rem"}>
         {days[day.getDay()]}
       </Box>
-      <Input
-        onChange={(e) => {
-          onLiturgyDescritpionChange(day, e.target.value);
-        }}
+      <LiturgyInput
+        onLiturgyDescritpionChange={(value) =>
+          onLiturgyDescritpionChange(day, value)
+        }
         value={getLiturgyForDay(day, liturgy, liturgyOverride)}
       />
       <Button

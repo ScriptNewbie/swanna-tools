@@ -379,6 +379,7 @@ function App() {
               liturgyOverride={liturgyOverride}
               onLiturgyDescritpionChange={handleLiturgyDescriptionChange}
               onMassAdd={handleMassAdd}
+              scheduleForDay={massSchedule[day.toISOString().split("T")[0]]}
             />
             {massSchedule[day.toISOString().split("T")[0]]?.map((mass) => (
               <MassComponent

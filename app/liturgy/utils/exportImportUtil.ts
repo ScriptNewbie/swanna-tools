@@ -28,16 +28,16 @@ export const exportToJson = (
   announcements: Annoucments,
   additional: Additional
 ) => {
-  const filteredSchedule = keepLatestEntries(schedule, 3 * 52 * 7);
-  const filteredLiturgy = keepLatestEntries(liturgy, 3 * 52 * 7);
-  const filteredAnnouncements = keepLatestEntries(announcements, 3 * 52);
-  const filteredAdditional = keepLatestEntries(additional, 3 * 52);
+  // const filteredSchedule = keepLatestEntries(schedule, 3 * 52 * 7);
+  // const filteredLiturgy = keepLatestEntries(liturgy, 3 * 52 * 7);
+  // const filteredAnnouncements = keepLatestEntries(announcements, 3 * 52);
+  // const filteredAdditional = keepLatestEntries(additional, 3 * 52);
 
   return JSON.stringify({
-    schedule: filteredSchedule,
-    liturgy: filteredLiturgy,
-    announcements: filteredAnnouncements,
-    additional: filteredAdditional,
+    schedule,
+    liturgy,
+    announcements,
+    additional,
   });
 };
 

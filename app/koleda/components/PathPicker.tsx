@@ -17,13 +17,9 @@ function PathPicker({
   date,
   reverse,
 }: Props) {
-  const [allowLongOverride, setAllowLongOverride] = useState<boolean | null>(
-    currentPath?.isLong ? true : null
-  );
+  const [allowLong, setAllowLong] = useState(true);
 
   const [isOpen, setIsOpen] = useState(false);
-
-  const allowLong = allowLongOverride ?? date.getDay() === 6;
 
   const longPaths = availablePaths.filter((path) => path.isLong);
   const shortPaths = availablePaths.filter((path) => !path.isLong);
@@ -72,7 +68,7 @@ function PathPicker({
           onPointerEnter={() => setIsOpen(true)}
           onPointerLeave={() => setIsOpen(false)}
           isChecked={allowLong}
-          onChange={() => setAllowLongOverride(!allowLong)}
+          onChange={() => setAllowLong(!allowLong)}
         />
       </Tooltip>
     </Flex>

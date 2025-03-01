@@ -48,7 +48,7 @@ const paths: Path[] = [
   {
     id: 5,
     streets: {
-      normal: "ul. Torowa od 84 do 66, ul. Semaforowa od początku do końca",
+      normal: "ul. Torowa od 84 do 66, ul. Semaforowa od końca do początku",
       reversed: "ul. Semaforowa od końca do początku, ul. Torowa od 66 do 84",
     },
     isLong: false,
@@ -57,7 +57,7 @@ const paths: Path[] = [
     id: 6,
     streets: {
       normal: "ul. Torowa od 50 do 24 i ul. Trakcyjna",
-      reversed: "ul. Trakcyjna i ul. Torowa od 24 do 50",
+      reversed: "ul. Torowa od 24 do 50 i ul. Trakcyjna",
     },
     isLong: false,
   },
@@ -73,7 +73,7 @@ const paths: Path[] = [
     id: 8,
     streets: {
       normal: "ul. Kierunkowa od początku do końca i ulica Sygnałów",
-      reversed: "ulica Sygnałów i ul. Kierunkowa od końca do początku",
+      reversed: "ul. Kierunkowa od końca do początku i ulica Sygnałów",
     },
     isLong: false,
   },
@@ -101,7 +101,7 @@ const paths: Path[] = [
       normal:
         "ul. Cicha 13, 14 i 15, ul. Rudna 14, ul. Skośna od początku do Obwodnicy",
       reversed:
-        "ul. Skośna od Obwodnicy do początku, ul. Rudna 15, ul. Cicha 15, 14 i 13",
+        "ul. Skośna od Obwodnicy do początku, ul. Rudna 14, ul. Cicha 15, 14 i 13",
     },
     isLong: false,
   },
@@ -134,8 +134,8 @@ const paths: Path[] = [
   {
     id: 15,
     streets: {
-      normal: "ul. Szczęść Boże od nr 50 do kopalni zabytkowej",
-      reversed: "ul. Szczęść Boże od kopalni zabytkowej do nr 50",
+      normal: "ul. Szczęść Boże od nr 52 do kopalni zabytkowej",
+      reversed: "ul. Szczęść Boże od kopalni zabytkowej do nr 52",
     },
     isLong: true,
   },
@@ -191,7 +191,7 @@ const paths: Path[] = [
       normal:
         "ul. Gliwicka od ul. Nowej do Obwodnicy, ul. Śląska, Kujawska i Wielkopolska",
       reversed:
-        "ul. Śląska, Kujawska i Wielkopolska, ul. Gliwicka od Obwodnicy do ul. Nowej",
+        "ul. Śląska, Wielkopolska i Kujawska, ul. Gliwicka od Obwodnicy do ul. Nowej",
     },
     isLong: false,
   },
@@ -230,8 +230,8 @@ const paths: Path[] = [
   {
     id: 26,
     streets: {
-      normal: "ul. Szczęść Boże (od 1 - 49)",
-      reversed: "ul. Szczęść Boże (od 49 - 1)",
+      normal: "ul. Szczęść Boże (od 1 - 51)",
+      reversed: "ul. Szczęść Boże (od 51 - 1)",
     },
     isLong: false,
   },

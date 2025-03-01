@@ -91,7 +91,8 @@ const getSpecialEventsForDay = (date: Date) => {
         getService(day, "Msza Wieczerzy Pańskiej", "18:00", false)
       );
     } else {
-      if (day === 5) specialEvents.push(getService(day, "Droga krzyżowa"));
+      if (day === 5)
+        specialEvents.push(getService(day, "Droga krzyżowa", "17:15"));
       if (day === 7) specialEvents.push(getService(day, "Gorzkie żale"));
     }
   }

@@ -14,9 +14,14 @@ export const useLiturgia = () => {
   const [liturgia, setLiturgia] = useState<LiturgyDay[]>([]);
 
   useEffect(() => {
-    getLiturgia().then((res) => {
-      setLiturgia(res.map((day) => ({ ...day, date: new Date(day.date) })));
-    });
+    getLiturgia()
+      .then((res) => {
+        setLiturgia(res.map((day) => ({ ...day, date: new Date(day.date) })));
+      })
+      .catch((error) => {
+        console.error("Error loading liturgia:", error);
+        setLiturgia([]);
+      });
   }, []);
 
   const liturgyObject = {} as Liturgy;

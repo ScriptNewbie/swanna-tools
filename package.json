@@ -16,10 +16,10 @@
     "axios": "^1.6.7",
     "cheerio": "^1.0.0-rc.12",
     "file-saver": "^2.0.5",
-    "framer-motion": "^11.0.5",
-    "next": "^14.2.33",
-    "react": "^18",
-    "react-dom": "^18",
+    "framer-motion": "^11.18.2",
+    "next": "^16.1.6",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-markdown": "^9.0.1",
     "remark-align": "^1.2.14",
     "remark-directive": "^3.0.0",
@@ -29,10 +29,10 @@
   "devDependencies": {
     "@types/file-saver": "^2.0.7",
     "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
+    "@types/react": "^18.3.28",
+    "@types/react-dom": "^18.3.7",
     "eslint": "^9",
-    "eslint-config-next": "^16.0.7",
+    "eslint-config-next": "^16.1.6",
     "typescript": "^5"
   }
 }

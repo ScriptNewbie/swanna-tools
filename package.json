@@ -13,11 +13,11 @@
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
-    "axios": "^1.6.7",
+    "axios": "^1.18.0",
     "cheerio": "^1.0.0-rc.12",
     "file-saver": "^2.0.5",
     "framer-motion": "^11.18.2",
-    "next": "^16.1.6",
+    "next": "^16.3.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-markdown": "^9.0.1",
@@ -32,7 +32,7 @@
     "@types/react": "^18.3.28",
     "@types/react-dom": "^18.3.7",
     "eslint": "^9",
-    "eslint-config-next": "^16.1.6",
+    "eslint-config-next": "^16.3.0",
     "typescript": "^5"
   }
 }

@@ -34,5 +34,9 @@
     "eslint": "^9",
     "eslint-config-next": "^16.3.8",
     "typescript": "^5"
+  },
+  "overrides": {
+    "sharp": "0.35.5",
+    "source-map-js": "1.2.2"
   }
 }

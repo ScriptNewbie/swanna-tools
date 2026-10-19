@@ -2,6 +2,14 @@
 
 FROM node:24-alpine AS base
 
+# node:24-alpine (Node 24.22.0 / Alpine 3.24.2, 2026-10-14) still ships
+# zlib 1.3.2-r0, OpenSSL 3.5.8, and npm 11.19.1. Stay on Alpine 3.24 and
+# npm 11: zlib 1.3.2-r1, OpenSSL 3.5.9, and npm 11.21.1 (first 11.x whose
+# tree updates brace-expansion, undici, ip-address, postcss-selector-parser,
+# and http-cache-semantics).
+RUN apk add --no-cache --upgrade zlib libcrypto3 libssl3 \
+ && npm install -g npm@11.21.1
+
 # Install dependencies only when needed
 FROM base AS deps
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.

@@ -1,12 +1,14 @@
 # syntax=docker.io/docker/dockerfile:1
 
-FROM node:24-alpine AS base
+# Pin the Oct 21, 2026 Node.js security release (CVE-2026-111497 Brotli
+# RCE and the other runtime CVEs). A floating node:24-alpine tag can reuse
+# a cached 24.22.0 layer. node:24.22.1-alpine (Alpine 3.24.3) already ships
+# zlib 1.3.2-r1 and OpenSSL 3.5.9-r0; apk upgrade still picks up later
+# Alpine patches. Bundled npm is still 11.19.1, so install npm 11.21.1
+# (first 11.x whose tree updates brace-expansion, undici, ip-address,
+# postcss-selector-parser, and http-cache-semantics).
+FROM node:24.22.1-alpine AS base
 
-# node:24-alpine (Node 24.22.0 / Alpine 3.24.2, 2026-10-14) still ships
-# zlib 1.3.2-r0, OpenSSL 3.5.8, and npm 11.19.1. Stay on Alpine 3.24 and
-# npm 11: zlib 1.3.2-r1, OpenSSL 3.5.9, and npm 11.21.1 (first 11.x whose
-# tree updates brace-expansion, undici, ip-address, postcss-selector-parser,
-# and http-cache-semantics).
 RUN apk add --no-cache --upgrade zlib libcrypto3 libssl3 \
  && npm install -g npm@11.21.1
 

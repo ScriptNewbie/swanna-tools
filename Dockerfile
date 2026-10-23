@@ -5,12 +5,21 @@
 # a cached 24.22.0 layer. node:24.22.1-alpine (Alpine 3.24.3) already ships
 # zlib 1.3.2-r1 and OpenSSL 3.5.9-r0; apk upgrade still picks up later
 # Alpine patches. Bundled npm is still 11.19.1, so install npm 11.21.1
-# (first 11.x whose tree updates brace-expansion, undici, ip-address,
-# postcss-selector-parser, and http-cache-semantics).
+# (first 11.x whose tree updates brace-expansion, undici,
+# postcss-selector-parser, and http-cache-semantics). npm 11.21.1 and
+# npm 12.2.1 still ship ip-address 10.7.2 (GHSA-rxp7-6hxx-x8q5 /
+# CVE-2026-111997, fixed in 10.7.4). socks and @npmcli/agent accept ^10.1.x,
+# so overlay that single patch into the npm CLI tree.
 FROM node:24.22.1-alpine AS base
 
 RUN apk add --no-cache --upgrade zlib libcrypto3 libssl3 \
- && npm install -g npm@11.21.1
+ && npm install -g npm@11.21.1 \
+ && npm pack ip-address@10.7.4 --pack-destination /tmp \
+ && rm -rf /usr/local/lib/node_modules/npm/node_modules/ip-address \
+ && mkdir -p /usr/local/lib/node_modules/npm/node_modules/ip-address \
+ && tar -xzf /tmp/ip-address-10.7.4.tgz -C /usr/local/lib/node_modules/npm/node_modules/ip-address --strip-components=1 \
+ && rm -f /tmp/ip-address-10.7.4.tgz \
+ && node -e "const v=require('/usr/local/lib/node_modules/npm/node_modules/ip-address/package.json').version; if (v!=='10.7.4') { console.error('unexpected ip-address', v); process.exit(1); }"
 
 # Install dependencies only when needed
 FROM base AS deps

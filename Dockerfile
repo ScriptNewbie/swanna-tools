@@ -8,18 +8,24 @@
 # (first 11.x whose tree updates brace-expansion, undici,
 # postcss-selector-parser, and http-cache-semantics). npm 11.21.1 and
 # npm 12.2.1 still ship ip-address 10.7.2 (GHSA-rxp7-6hxx-x8q5 /
-# CVE-2026-111997, fixed in 10.7.4). socks and @npmcli/agent accept ^10.1.x,
-# so overlay that single patch into the npm CLI tree.
+# CVE-2026-111997, fixed in 10.7.4). socks and @npmcli/agent accept ^10.1.x.
+# The same npm tree ships undici 6.29.0 for node-gyp (^6.25.0). That copy is
+# affected by GHSA-xjj6-f33q-929c / CVE-2026-109869 and GHSA-4qv8-2p9j-2685 /
+# CVE-2026-109924, both fixed in 6.29.1. Node's own undici is already 7.30.1
+# (process.versions.undici); only the npm CLI copy needs this overlay.
 FROM node:24.22.1-alpine AS base
 
 RUN apk add --no-cache --upgrade zlib libcrypto3 libssl3 \
  && npm install -g npm@11.21.1 \
- && npm pack ip-address@10.7.4 --pack-destination /tmp \
+ && npm pack ip-address@10.7.4 undici@6.29.1 --pack-destination /tmp \
  && rm -rf /usr/local/lib/node_modules/npm/node_modules/ip-address \
  && mkdir -p /usr/local/lib/node_modules/npm/node_modules/ip-address \
  && tar -xzf /tmp/ip-address-10.7.4.tgz -C /usr/local/lib/node_modules/npm/node_modules/ip-address --strip-components=1 \
- && rm -f /tmp/ip-address-10.7.4.tgz \
- && node -e "const v=require('/usr/local/lib/node_modules/npm/node_modules/ip-address/package.json').version; if (v!=='10.7.4') { console.error('unexpected ip-address', v); process.exit(1); }"
+ && rm -rf /usr/local/lib/node_modules/npm/node_modules/undici \
+ && mkdir -p /usr/local/lib/node_modules/npm/node_modules/undici \
+ && tar -xzf /tmp/undici-6.29.1.tgz -C /usr/local/lib/node_modules/npm/node_modules/undici --strip-components=1 \
+ && rm -f /tmp/ip-address-10.7.4.tgz /tmp/undici-6.29.1.tgz \
+ && node -e "const ip=require('/usr/local/lib/node_modules/npm/node_modules/ip-address/package.json').version; const u=require('/usr/local/lib/node_modules/npm/node_modules/undici'); const uv=require('/usr/local/lib/node_modules/npm/node_modules/undici/package.json').version; if (ip!=='10.7.4' || uv!=='6.29.1' || !u.fetch) { console.error('unexpected', ip, uv); process.exit(1); }"
 
 # Install dependencies only when needed
 FROM base AS deps
